@@ -400,7 +400,7 @@ Integrazione personalizzata per **gestire la dispensa di casa** in Home Assistan
 ✅ **Cache dei prodotti**: i risultati restano in memoria per 30 giorni
 
 <p align="center">
-<img width="241" height="443" alt="image" src="https://github.com/user-attachments/assets/e8667b3a-f803-4ffe-b07c-73584ac45112" />
+<img width="241" height="443" alt="image" src="https://github.com/user-attachments/assets/12c387d2-c46f-4e72-b8a6-fb68fe6e8d26" />
 </p>
 
 ---
