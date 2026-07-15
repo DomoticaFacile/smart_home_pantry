@@ -48,6 +48,10 @@ A custom integration to **manage your food pantry** in Home Assistant and keep e
 ✅ **Customizable**: date format, sorting, thresholds, menu name  
 ✅ **Product cache**: lookups are kept for 30 days
 
+<p align="center">
+<img width="241" height="443" alt="image" src="https://github.com/user-attachments/assets/e8667b3a-f803-4ffe-b07c-73584ac45112" />
+</p>
+
 ---
 
 ## ⚙️ Installation via HACS
@@ -394,6 +398,10 @@ Integrazione personalizzata per **gestire la dispensa di casa** in Home Assistan
 ✅ **Doppia soglia**: preavviso (arancione) e critica (rosso)  
 ✅ **Personalizzabile**: formato data, ordinamento, soglie, nome della voce di menu  
 ✅ **Cache dei prodotti**: i risultati restano in memoria per 30 giorni
+
+<p align="center">
+<img width="241" height="443" alt="image" src="https://github.com/user-attachments/assets/e8667b3a-f803-4ffe-b07c-73584ac45112" />
+</p>
 
 ---
 
