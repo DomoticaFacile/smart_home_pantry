@@ -1,0 +1,18 @@
+{
+  "domain": "smart_home_pantry",
+  "name": "Smart Home Pantry",
+  "version": "0.2.2",
+  "config_flow": true,
+  "dependencies": [
+    "frontend",
+    "http",
+    "lovelace",
+    "panel_custom"
+  ],
+  "documentation": "https://github.com/DomoticaFacile/smart_home_pantry",
+  "issue_tracker": "https://github.com/DomoticaFacile/smart_home_pantry/issues",
+  "requirements": [],
+  "codeowners": [
+    "@DomoticaFacile"
+  ]
+}

@@ -1,0 +1,193 @@
+scan_barcode:
+  name: Scan Barcode
+  description: Aggiunge un pezzo del prodotto identificato dal codice a barre (cerca nome/marca su OpenFoodFacts). Se esiste gia un lotto con la stessa scadenza, ne incrementa la quantita.
+  fields:
+    barcode:
+      name: Codice a barre
+      description: Codice a barre (EAN/UPC) del prodotto.
+      required: true
+      example: "8001505005707"
+      selector:
+        text:
+    expiry_date:
+      name: Data di scadenza
+      description: Data di scadenza del lotto (facoltativa).
+      required: false
+      example: "2025-12-31"
+      selector:
+        date:
+
+add_product:
+  name: Add Product
+  description: Aggiunge manualmente un prodotto specificando nome e marca, senza cercarlo su OpenFoodFacts. Utile per prodotti senza codice a barre o non presenti nel database.
+  fields:
+    barcode:
+      name: Codice a barre
+      description: Codice a barre o identificatore del prodotto. Serve a raggruppare i lotti dello stesso prodotto.
+      required: true
+      example: "8001505005707"
+      selector:
+        text:
+    name:
+      name: Nome
+      description: Nome del prodotto.
+      required: false
+      example: "Latte parzialmente scremato"
+      selector:
+        text:
+    brand:
+      name: Marca
+      description: Marca del prodotto.
+      required: false
+      example: "Granarolo"
+      selector:
+        text:
+    expiry_date:
+      name: Data di scadenza
+      description: Data di scadenza del lotto (facoltativa).
+      required: false
+      example: "2025-12-31"
+      selector:
+        date:
+
+remove_product:
+  name: Remove Product
+  description: Rimuove completamente un prodotto dalla dispensa, inclusi tutti i suoi lotti, indipendentemente dalla quantita.
+  fields:
+    barcode:
+      name: Codice a barre
+      description: Codice a barre del prodotto da rimuovere del tutto.
+      required: true
+      example: "8001505005707"
+      selector:
+        text:
+
+remove_quantity:
+  name: Remove Quantity
+  description: Rimuove un certo numero di pezzi di un prodotto. I pezzi vengono tolti partendo dal lotto che scade prima (FEFO).
+  fields:
+    barcode:
+      name: Codice a barre
+      description: Codice a barre del prodotto da cui prelevare.
+      required: true
+      example: "8001505005707"
+      selector:
+        text:
+    quantity:
+      name: Quantita
+      description: Numero di pezzi da rimuovere.
+      required: true
+      default: 1
+      example: 2
+      selector:
+        number:
+          min: 1
+          max: 999
+          mode: box
+
+update_quantity:
+  name: Update Quantity
+  description: Imposta la quantita totale di un prodotto a un valore assoluto (agisce sul primo lotto trovato per quel codice a barre).
+  fields:
+    barcode:
+      name: Codice a barre
+      description: Codice a barre del prodotto.
+      required: true
+      example: "8001505005707"
+      selector:
+        text:
+    quantity:
+      name: Quantita
+      description: Nuova quantita (valore assoluto, non incrementale).
+      required: true
+      default: 1
+      example: 5
+      selector:
+        number:
+          min: 0
+          max: 999
+          mode: box
+
+update_lot:
+  name: Update Lot
+  description: Modifica un lotto specifico di un prodotto, identificato dal codice a barre e dalla sua scadenza attuale. Permette di cambiare la quantita e/o la data di scadenza. Se la nuova scadenza coincide con quella di un altro lotto dello stesso prodotto, i due lotti vengono uniti.
+  fields:
+    barcode:
+      name: Codice a barre
+      description: Codice a barre del prodotto a cui appartiene il lotto.
+      required: true
+      example: "8001505005707"
+      selector:
+        text:
+    old_expiry_date:
+      name: Scadenza attuale
+      description: Data di scadenza attuale del lotto da modificare. Lascia vuoto per il lotto senza data.
+      required: false
+      example: "2025-12-31"
+      selector:
+        date:
+    quantity:
+      name: Nuova quantita
+      description: Nuova quantita del lotto. Se impostata a 0, il lotto viene rimosso. Lascia vuoto per non modificarla.
+      required: false
+      example: 3
+      selector:
+        number:
+          min: 0
+          max: 999
+          mode: box
+    new_expiry_date:
+      name: Nuova scadenza
+      description: Nuova data di scadenza del lotto. Lascia vuoto per non modificarla.
+      required: false
+      example: "2026-01-15"
+      selector:
+        date:
+
+refresh:
+  name: Refresh
+  description: Ricalcola le statistiche della dispensa (conteggi, prodotti in scadenza e scaduti) e aggiorna i sensori. Utile dopo modifiche o per forzare l'aggiornamento.
+
+clear_pantry:
+  name: Clear Pantry
+  description: Svuota completamente la dispensa, rimuovendo tutti i prodotti e i lotti. Operazione irreversibile.
+
+clear_cache:
+  name: Clear Cache
+  description: Svuota la cache locale dei lookup Open Food Facts. Al prossimo scan le informazioni dei prodotti verranno richieste di nuovo all'API. Utile se i dati di un prodotto sono stati corretti su Open Food Facts.
+
+lookup_barcode:
+  name: Lookup Barcode
+  description: Cerca il nome di un prodotto dal codice a barre (usando la cache e Open Food Facts) SENZA aggiungerlo alla dispensa. Il risultato viene pubblicato negli attributi del sensore principale. Usato internamente dalla card per mostrare e far confermare il nome prima dell'inserimento.
+  fields:
+    barcode:
+      name: Codice a barre
+      description: Codice a barre da cercare.
+      required: true
+      example: "8001505005707"
+      selector:
+        text:
+    request_id:
+      name: ID richiesta
+      description: Identificatore univoco della richiesta, usato per abbinare la risposta. Facoltativo.
+      required: false
+      example: "req_123"
+      selector:
+        text:
+
+clear_expired:
+  name: Clear Expired
+  description: "Rimuove dalla dispensa tutti i lotti gia' scaduti, lasciando intatti quelli ancora validi. Operazione irreversibile; se ti serve la lista, esportala prima con export_expired."
+
+export_expired:
+  name: Export Expired
+  description: "Salva la lista dei prodotti scaduti come file Excel (.xlsx) nella cartella www di Home Assistant, scaricabile poi da /local/ + nome file. Utile per automazioni, ad esempio per inviarlo via email."
+  fields:
+    filename:
+      name: Nome del file
+      description: "Nome del file da creare nella cartella www (l'estensione .xlsx viene aggiunta se manca)."
+      required: false
+      example: "prodotti_scaduti.xlsx"
+      default: "prodotti_scaduti.xlsx"
+      selector:
+        text:

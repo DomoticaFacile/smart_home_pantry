@@ -1,0 +1,39 @@
+{
+  "title": "Smart Home Pantry",
+  "options": {
+    "step": {
+      "init": {
+        "title": "Smart Home Pantry settings",
+        "data": {
+          "persistent_enabled": "Persistent notification in Home Assistant",
+          "push_enabled": "Push notification to Companion app",
+          "notify_services": "Notify services (e.g. mobile_app_phone, comma separated)",
+          "notify_time": "Daily expiry check time",
+          "days_before": "Warning days: product is 'expiring' from here (orange)",
+          "days_critical": "Critical days: product becomes urgent from here (red)",
+          "date_format": "Date format",
+          "next_expiry_within": "Show 'Next expiry' only if within these days",
+          "expired_within": "Show expired products in the hero for this many days after expiry",
+          "sort_order": "Product list sorting",
+          "sidebar_enabled": "Show the pantry in the Home Assistant sidebar",
+          "sidebar_title": "Sidebar item name"
+        }
+      }
+    },
+    "error": {
+      "invalid_time": "Invalid time, use HH:MM format (e.g. 09:00)",
+      "critical_above_warning": "Critical days cannot exceed warning days"
+    }
+  },
+  "selector": {
+    "sort_order": {
+      "options": {
+        "expiry": "Nearest expiry first (expired on top)",
+        "expiry_valid": "Expiring first, expired at the bottom",
+        "alphabetical": "Alphabetical (A-Z)",
+        "quantity_asc": "Running low first (fewest items)",
+        "quantity_desc": "Most items first"
+      }
+    }
+  }
+}

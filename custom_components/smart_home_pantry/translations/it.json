@@ -1,0 +1,39 @@
+{
+  "title": "Smart Home Pantry",
+  "options": {
+    "step": {
+      "init": {
+        "title": "Impostazioni Smart Home Pantry",
+        "data": {
+          "persistent_enabled": "Notifica persistente in Home Assistant",
+          "push_enabled": "Notifica push su app Companion",
+          "notify_services": "Servizi notify (es. mobile_app_telefono, separati da virgola)",
+          "notify_time": "Orario del controllo giornaliero delle scadenze",
+          "days_before": "Giorni di preavviso: da qui il prodotto e' 'in scadenza' (arancione)",
+          "days_critical": "Giorni critici: da qui il prodotto diventa urgente (rosso)",
+          "date_format": "Formato della data",
+          "next_expiry_within": "Mostra 'Prossima scadenza' solo se entro questi giorni",
+          "expired_within": "Mostra i prodotti scaduti nell'hero per questi giorni dopo la scadenza",
+          "sort_order": "Ordinamento della lista prodotti",
+          "sidebar_enabled": "Mostra la dispensa nella barra laterale di Home Assistant",
+          "sidebar_title": "Nome della voce nella barra laterale"
+        }
+      }
+    },
+    "error": {
+      "invalid_time": "Orario non valido, usa il formato HH:MM (es. 09:00)",
+      "critical_above_warning": "I giorni critici non possono superare i giorni di preavviso"
+    }
+  },
+  "selector": {
+    "sort_order": {
+      "options": {
+        "expiry": "Scadenza piu' vicina (scaduti in cima)",
+        "expiry_valid": "In scadenza prima, scaduti in fondo",
+        "alphabetical": "Ordine alfabetico (A-Z)",
+        "quantity_asc": "In esaurimento prima (meno pezzi)",
+        "quantity_desc": "Piu' numerosi prima"
+      }
+    }
+  }
+}
