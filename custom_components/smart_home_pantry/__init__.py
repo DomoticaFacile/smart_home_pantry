@@ -1,9 +1,9 @@
 # Creato da domoticafacile.it
-
 import logging
 import os
 from datetime import datetime, date
 
+import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers.event import async_track_time_change
 from homeassistant.components.persistent_notification import (
@@ -48,11 +48,12 @@ _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS = ["sensor"]
 
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
 async def async_setup(hass, config):
     return True
 
 async def async_setup_entry(hass, entry):
-
     try:
         from .frontend import async_register_card
         version = "0"
@@ -60,7 +61,6 @@ async def async_setup_entry(hass, entry):
             version = entry.version and str(entry.version) or "0"
         except Exception:
             pass
-
         integration = hass.data.get("integrations", {}).get(DOMAIN)
         manifest_version = None
         try:
@@ -100,7 +100,6 @@ async def async_setup_entry(hass, entry):
             merged[k]["quantity"]=merged[k].get("quantity",1)+p.get("quantity",1)
     data["products"]=list(merged.values())
     data["unique_products"]=len(data["products"])
-
     for p in data["products"]:
         p.setdefault("expiry_date", None)
 
@@ -400,7 +399,6 @@ async def async_setup_entry(hass, entry):
         data["products_count"] = sum(int(x.get("quantity",0)) for x in data["products"])
         await save_and_refresh()
 
-
     async def handle_update_quantity(call):
         barcode = call.data.get("barcode", "")
         quantity = int(call.data.get("quantity", 1))
@@ -413,7 +411,6 @@ async def async_setup_entry(hass, entry):
         await save_and_refresh()
 
     async def handle_update_lot(call):
-
         barcode = call.data.get("barcode", "")
 
         old_expiry = call.data.get("old_expiry_date")
@@ -446,14 +443,12 @@ async def async_setup_entry(hass, entry):
             except (TypeError, ValueError):
                 q = target.get("quantity", 1)
             if q <= 0:
-
                 data["products"].remove(target)
                 target = None
             else:
                 target["quantity"] = q
 
         if target is not None and has_new_expiry and new_expiry != old_expiry:
-
             merge_into = None
             for p in data["products"]:
                 if p is target:
@@ -471,7 +466,6 @@ async def async_setup_entry(hass, entry):
         data["unique_products"] = len(data["products"])
         data["products_count"] = sum(int(x.get("quantity", 0)) for x in data["products"])
         await save_and_refresh()
-
 
     async def handle_remove_quantity(call):
 
@@ -538,13 +532,11 @@ async def async_setup_entry(hass, entry):
         await save_and_refresh()
 
     async def handle_clear_cache(call):
-
         barcode_cache.clear()
         await cache_store.async_save(barcode_cache)
         _LOGGER.info("Cache lookup Open Food Facts svuotata")
 
     async def handle_clear_expired(call):
-
         today = date.today()
         rimasti = []
         rimossi = 0
@@ -569,13 +561,11 @@ async def async_setup_entry(hass, entry):
         await save_and_refresh()
 
     async def handle_export_expired(call):
-
         from .export import build_xlsx, expired_rows
 
         filename = str(call.data.get("filename") or "prodotti_scaduti.xlsx").strip()
         if not filename.endswith(".xlsx"):
             filename += ".xlsx"
-
         filename = os.path.basename(filename)
 
         www_dir = hass.config.path("www")
@@ -601,7 +591,6 @@ async def async_setup_entry(hass, entry):
             _LOGGER.error("Errore durante l'export dei prodotti scaduti: %s", err)
 
     async def handle_lookup_barcode(call):
-
         barcode = str(call.data.get("barcode", "")).strip()
         request_id = call.data.get("request_id")
 
@@ -657,7 +646,6 @@ async def async_setup_entry(hass, entry):
         )
 
     def _sidebar_title():
-
         opts = entry.options
         titolo = opts.get(CONF_SIDEBAR_TITLE)
         if not titolo:
@@ -671,7 +659,6 @@ async def async_setup_entry(hass, entry):
         await async_setup_panel(hass, abilitato, _sidebar_title())
 
     def _update_card_settings():
-
         opts = entry.options
         data["card_settings"] = {
             "days_before": int(opts.get(CONF_DAYS_BEFORE, DEFAULT_DAYS_BEFORE)),
@@ -738,7 +725,6 @@ async def async_unload_entry(hass, entry):
     if unsub_options_update:
         unsub_options_update()
 
-    # toglie la voce dalla barra laterale
     if domain_data.get("panel_registered"):
         from .frontend import async_remove_panel
         await async_remove_panel(hass)
