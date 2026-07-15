@@ -1,7 +1,7 @@
 {
   "domain": "smart_home_pantry",
   "name": "Smart Home Pantry",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "config_flow": true,
   "dependencies": [
     "frontend",
@@ -10,6 +10,7 @@
     "panel_custom"
   ],
   "documentation": "https://github.com/DomoticaFacile/smart_home_pantry",
+  "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/DomoticaFacile/smart_home_pantry/issues",
   "requirements": [],
   "codeowners": [
