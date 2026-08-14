@@ -112,7 +112,6 @@ class SmartHomePantryCard extends HTMLElement {
     const today = new Date(); today.setHours(0,0,0,0);
     const daysTo = (s)=>{ if(!s) return null; const d=new Date(s+"T00:00:00"); if(isNaN(d)) return null; return Math.round((d-today)/86400000); };
 
-    // palette
     const RED="#e53935", ORANGE="#fb8c00", GREEN="#43a047", BLUE="#1e88e5";
     const primaryText="var(--primary-text-color,#1c1c1c)";
     const secondaryText="var(--secondary-text-color,#888)";
@@ -355,38 +354,83 @@ class SmartHomePantryCard extends HTMLElement {
     bAdd.addEventListener("click", ()=>this._openScanner("add"));
   }
 
+  _scannerErrore(mode, motivo){
+    const overlaySafe = document.querySelector("#shp_scan_overlay");
+    if(overlaySafe) overlaySafe.remove();
+    let messaggio;
+    if(motivo==="insecure"){
+      messaggio = "La fotocamera non e' disponibile perche' stai usando una connessione non sicura (http).\n\niPhone e Safari permettono la fotocamera solo tramite HTTPS.\n\nInserisci il codice a barre a mano:";
+    } else if(motivo==="denied"){
+      messaggio = "Permesso fotocamera negato.\n\nVai nelle impostazioni del browser/app e consenti l'accesso alla fotocamera, oppure inserisci il codice a mano:";
+    } else if(motivo==="nolib"){
+      messaggio = "Impossibile caricare lo scanner (libreria non raggiungibile).\n\nInserisci il codice a barre a mano:";
+    } else {
+      messaggio = "Scanner non disponibile.\n\nInserisci il codice a barre a mano:";
+    }
+    const barcode = prompt(messaggio);
+    if(!barcode) return;
+    if(mode==="add"){ this._handleScannedBarcode(barcode); }
+    else {
+      const qtyStr=prompt("Quanti pezzi vuoi rimuovere?","1");
+      const qty=Math.max(1,parseInt(qtyStr||"1",10)||1);
+      this._hass.callService("smart_home_pantry","remove_quantity",{barcode,quantity:qty});
+    }
+  }
+
   _openScanner(mode){
-    const overlay=this._el("div",{position:"fixed",inset:"0",background:"black",zIndex:"9999"});
-    const reader=this._el("div",{width:"100%",height:"90%"},{id:mode==="add"?"reader":"reader_remove"});
-    const closeBtn=this._el("button",{position:"absolute",top:"10px",right:"10px",fontSize:"20px"},{text:"\u2716"});
+    const secure = window.isSecureContext || window.location.protocol==="https:" || window.location.hostname==="localhost" || window.location.hostname==="127.0.0.1";
+    const hasCamera = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+    if(!secure || !hasCamera){
+      this._scannerErrore(mode, !secure ? "insecure" : "nolib");
+      return;
+    }
+
+    const overlay=this._el("div",{position:"fixed",inset:"0",background:"black",zIndex:"9999",display:"flex",flexDirection:"column"},{id:"shp_scan_overlay"});
+    const reader=this._el("div",{width:"100%",flex:"1",minHeight:"0"},{id:mode==="add"?"reader":"reader_remove"});
+    const closeBtn=this._el("button",{position:"absolute",top:"12px",right:"12px",fontSize:"22px",zIndex:"1",background:"rgba(0,0,0,.5)",color:"#fff",border:"none",borderRadius:"50%",width:"44px",height:"44px",cursor:"pointer"},{text:"\u2716"});
     overlay.appendChild(reader); overlay.appendChild(closeBtn);
     document.body.appendChild(overlay);
-    const loadLib=()=>new Promise((resolve,reject)=>{ if(window.Html5Qrcode){resolve();return;} const s=document.createElement('script'); s.src='https://unpkg.com/html5-qrcode'; s.onload=resolve; s.onerror=reject; document.head.appendChild(s); });
+
+    const loadLib=()=>new Promise((resolve,reject)=>{
+      if(window.Html5Qrcode){resolve();return;}
+      const s=document.createElement('script');
+      s.src='https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+      s.onload=resolve;
+      s.onerror=()=>reject(new Error("nolib"));
+      document.head.appendChild(s);
+    });
     const done = mode==="add" ? "__shp_scan_done" : "__shp_remove_done";
     (async ()=>{
+      let qr=null;
       try{
         await loadLib();
         window[done]=false;
-        const qr=new Html5Qrcode(reader.id);
-        await qr.start({facingMode:"environment"},{fps:10,qrbox:250}, async(decodedText)=>{
-          if(window[done]) return; window[done]=true;
-          try{await qr.stop();}catch(e){}
-          overlay.remove();
-          if(mode==="add"){ await this._handleScannedBarcode(decodedText); }
-          else {
-            const qtyStr=prompt("Prodotto rilevato: "+decodedText+"\n\nQuanti pezzi vuoi rimuovere?","1");
-            const qty=Math.max(1,parseInt(qtyStr||"1",10)||1);
-            await this._hass.callService("smart_home_pantry","remove_quantity",{barcode:decodedText,quantity:qty});
-            alert("Rimossi "+qty+" pezzi");
-          }
-        });
+        qr=new Html5Qrcode(reader.id);
         closeBtn.onclick=async()=>{try{await qr.stop();}catch(e){} overlay.remove();};
+        await qr.start(
+          {facingMode:"environment"},
+          {fps:10,qrbox:{width:250,height:250}},
+          async(decodedText)=>{
+            if(window[done]) return; window[done]=true;
+            try{await qr.stop();}catch(e){}
+            overlay.remove();
+            if(mode==="add"){ await this._handleScannedBarcode(decodedText); }
+            else {
+              const qtyStr=prompt("Prodotto rilevato: "+decodedText+"\n\nQuanti pezzi vuoi rimuovere?","1");
+              const qty=Math.max(1,parseInt(qtyStr||"1",10)||1);
+              await this._hass.callService("smart_home_pantry","remove_quantity",{barcode:decodedText,quantity:qty});
+              alert("Rimossi "+qty+" pezzi");
+            }
+          }
+        );
       }catch(e){
-        overlay.remove();
-        const barcode=prompt(mode==="add"?"Scanner non disponibile. Inserisci barcode":"Barcode da rimuovere");
-        if(!barcode) return;
-        if(mode==="add"){ await this._handleScannedBarcode(barcode); }
-        else { const qtyStr=prompt("Quanti pezzi vuoi rimuovere?","1"); const qty=Math.max(1,parseInt(qtyStr||"1",10)||1); await this._hass.callService("smart_home_pantry","remove_quantity",{barcode,quantity:qty}); }
+        try{ if(qr) await qr.stop(); }catch(_){}
+        const nome = (e && (e.name||e.message||"")) + "";
+        let motivo = "generic";
+        if(nome==="nolib") motivo = "nolib";
+        else if(/NotAllowed|Permission/i.test(nome)) motivo = "denied";
+        else if(/NotFound|NotReadable|Overconstrained/i.test(nome)) motivo = "nolib";
+        this._scannerErrore(mode, motivo);
       }
     })();
   }
