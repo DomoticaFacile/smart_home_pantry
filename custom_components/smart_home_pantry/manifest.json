@@ -15,5 +15,5 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/DomoticaFacile/smart_home_pantry/issues",
   "requirements": [],
-  "version": "0.2.5"
+  "version": "0.3.0"
 }
