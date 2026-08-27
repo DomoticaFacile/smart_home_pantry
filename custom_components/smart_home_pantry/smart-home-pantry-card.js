@@ -1,6 +1,165 @@
 // Creato da domoticafacile.it
 
+const SHP_I18N = {
+  it: {
+    title: "\ud83d\udce6 Smart Home Pantry",
+    stat_total: "Totali",
+    stat_expiring: "In scadenza",
+    stat_expired: "Scaduti",
+    next_expiry: "\u23f3 Prossima scadenza: ",
+    today_paren: " (oggi)",
+    in_days_paren: " ({n} giorni)",
+    no_name: "Senza nome",
+    no_expiry: "Nessuna scadenza",
+    none_f: "Nessuna",
+    days: "giorni",
+    expires_today: "Scade oggi!",
+    expires_in: "Scade tra {n} giorni",
+    expires_on: "Scade il ",
+    expired_since: "Scaduto da {n} giorni",
+    empty: "\ud83e\uded9 La dispensa e' vuota.<br>Tocca <b>Aggiungi</b> per scansionare un prodotto.",
+    empty_short: "La dispensa e' vuota, niente da rimuovere.",
+    expired_one: "1 prodotto scaduto",
+    expired_many: "{n} prodotti scaduti",
+    btn_add: "\ud83d\udcf7 Aggiungi",
+    btn_take: "\ud83d\udce4 Preleva",
+    btn_remove: "\u2796 Rimuovi",
+    btn_refresh: "\ud83d\udd04 Aggiorna",
+    btn_clear: "\ud83d\uddd1\ufe0f Svuota",
+    modal_add: "\ud83d\udcf7 Aggiungi prodotto",
+    modal_edit: "\u270f\ufe0f Modifica lotto",
+    modal_remove: "\u2796 Rimozione manuale",
+    lbl_barcode: "Codice a barre",
+    lbl_name: "Nome prodotto",
+    lbl_quantity: "Quantita'",
+    lbl_expiry: "Data di scadenza",
+    cancel: "Annulla",
+    save: "Salva",
+    remove: "Rimuovi",
+    fefo_note: "I pezzi vengono tolti dal lotto che scade prima (FEFO).",
+    remove_lot_hint: "(0 = rimuovi lotto)",
+    available: "Disponibili: ",
+    first_expiry: " \u00b7 prima scadenza: ",
+    no_barcode_item: "Questo prodotto non ha codice a barre: non rimovibile da qui.",
+    searching: "\ud83d\udd0e Cerco il prodotto...",
+    ask_name: "Inserisci un nome per il prodotto.",
+    ask_qty_remove: "Quanti pezzi vuoi rimuovere?",
+    detected: "Prodotto rilevato: ",
+    removed_n: "Rimossi {n} pezzi",
+    added_n: "Aggiunti {n} pezzi",
+    confirm_clear: "Digita SVUOTA per confermare",
+    confirm_clear_word: "SVUOTA",
+    confirm_remove_lot: "Rimuovere completamente questo lotto di ",
+    confirm_remove_item: "Rimuovere {n} pezzi di {name} dalla dispensa?",
+    pantry_cleared: "Dispensa svuotata",
+    pantry_updated: "Dispensa aggiornata",
+    lot_updated: "Lotto aggiornato",
+    expired_cleared: "Prodotti scaduti rimossi",
+    err_update: "Errore durante l'aggiornamento",
+    err_clear: "Errore durante lo svuotamento",
+    err_add: "Errore durante l'aggiunta",
+    err_edit: "Errore durante la modifica",
+    err_remove: "Errore durante la rimozione",
+    err_remove_expired: "Errore durante la rimozione dei prodotti scaduti.",
+    err_download: "Non e' stato possibile scaricare il file.",
+    scan_insecure: "La fotocamera non e' disponibile perche' stai usando una connessione non sicura (http).\n\niPhone e Safari permettono la fotocamera solo tramite HTTPS.\n\nInserisci il codice a barre a mano:",
+    scan_denied: "Permesso fotocamera negato.\n\nVai nelle impostazioni del browser/app e consenti l'accesso alla fotocamera, oppure inserisci il codice a mano:",
+    scan_nolib: "Impossibile caricare lo scanner (libreria non raggiungibile).\n\nInserisci il codice a barre a mano:",
+    scan_generic: "Scanner non disponibile.\n\nInserisci il codice a barre a mano:",
+    btn_add_plain: "Aggiungi",
+    refreshing: "\u23f3 Aggiorno...",
+    confirm_remove_expired: "Rimuovere {items} dalla dispensa?\n\nL'operazione non e' reversibile: se ti serve la lista, scaricala prima in Excel.",
+    support: "\u2615 Sostieni il progetto"
+  },
+  en: {
+    title: "\ud83d\udce6 Smart Home Pantry",
+    stat_total: "Total",
+    stat_expiring: "Expiring",
+    stat_expired: "Expired",
+    next_expiry: "\u23f3 Next expiry: ",
+    today_paren: " (today)",
+    in_days_paren: " ({n} days)",
+    no_name: "No name",
+    no_expiry: "No expiry date",
+    none_f: "None",
+    days: "days",
+    expires_today: "Expires today!",
+    expires_in: "Expires in {n} days",
+    expires_on: "Expires on ",
+    expired_since: "Expired {n} days ago",
+    empty: "\ud83e\uded9 The pantry is empty.<br>Tap <b>Add</b> to scan a product.",
+    empty_short: "The pantry is empty, nothing to remove.",
+    expired_one: "1 expired product",
+    expired_many: "{n} expired products",
+    btn_add: "\ud83d\udcf7 Add",
+    btn_take: "\ud83d\udce4 Take out",
+    btn_remove: "\u2796 Remove",
+    btn_refresh: "\ud83d\udd04 Refresh",
+    btn_clear: "\ud83d\uddd1\ufe0f Empty",
+    modal_add: "\ud83d\udcf7 Add product",
+    modal_edit: "\u270f\ufe0f Edit lot",
+    modal_remove: "\u2796 Manual removal",
+    lbl_barcode: "Barcode",
+    lbl_name: "Product name",
+    lbl_quantity: "Quantity",
+    lbl_expiry: "Expiry date",
+    cancel: "Cancel",
+    save: "Save",
+    remove: "Remove",
+    fefo_note: "Items are taken from the lot expiring first (FEFO).",
+    remove_lot_hint: "(0 = remove lot)",
+    available: "Available: ",
+    first_expiry: " \u00b7 first expiry: ",
+    no_barcode_item: "This product has no barcode: cannot be removed from here.",
+    searching: "\ud83d\udd0e Looking up product...",
+    ask_name: "Enter a name for the product.",
+    ask_qty_remove: "How many items do you want to remove?",
+    detected: "Product detected: ",
+    removed_n: "Removed {n} items",
+    added_n: "Added {n} items",
+    confirm_clear: "Type EMPTY to confirm",
+    confirm_clear_word: "EMPTY",
+    confirm_remove_lot: "Completely remove this lot of ",
+    confirm_remove_item: "Remove {n} items of {name} from the pantry?",
+    pantry_cleared: "Pantry emptied",
+    pantry_updated: "Pantry updated",
+    lot_updated: "Lot updated",
+    expired_cleared: "Expired products removed",
+    err_update: "Error while refreshing",
+    err_clear: "Error while emptying",
+    err_add: "Error while adding",
+    err_edit: "Error while editing",
+    err_remove: "Error while removing",
+    err_remove_expired: "Error while removing expired products.",
+    err_download: "Could not download the file.",
+    scan_insecure: "The camera is not available because you are using an insecure connection (http).\n\niPhone and Safari only allow the camera over HTTPS.\n\nEnter the barcode manually:",
+    scan_denied: "Camera permission denied.\n\nGo to your browser/app settings and allow camera access, or enter the barcode manually:",
+    scan_nolib: "Could not load the scanner (library unreachable).\n\nEnter the barcode manually:",
+    scan_generic: "Scanner not available.\n\nEnter the barcode manually:",
+    btn_add_plain: "Add",
+    refreshing: "\u23f3 Refreshing...",
+    confirm_remove_expired: "Remove {items} from the pantry?\n\nThis cannot be undone: if you need the list, download it to Excel first.",
+    support: "\u2615 Support the project"
+  }
+};
+
 class SmartHomePantryCard extends HTMLElement {
+
+  _lang(){
+    const h=this._hass;
+    let l=(this.config&&this.config.language)||(h&&h.language)||(h&&h.locale&&h.locale.language)||"en";
+    l=String(l||"en").toLowerCase().split("-")[0];
+    return (SHP_I18N[l]?l:"en");
+  }
+
+  _t(key, vars){
+    const l=this._lang();
+    const dict=SHP_I18N[l]||SHP_I18N.en;
+    let s=(dict[key]!=null)?dict[key]:(SHP_I18N.en[key]!=null?SHP_I18N.en[key]:key);
+    if(vars){ for(const k in vars){ s=s.split("{"+k+"}").join(String(vars[k])); } }
+    return s;
+  }
+
 
   setConfig(config){ this.config = config; }
 
@@ -31,10 +190,10 @@ class SmartHomePantryCard extends HTMLElement {
     if(fmt === "mm/dd/yyyy") return m + "/" + d + "/" + y;
     if(fmt === "relative"){
       if(days === null || days === undefined) return d + "/" + m + "/" + y;
-      if(days < 0) return "Scaduto da " + Math.abs(days) + (Math.abs(days) === 1 ? " giorno" : " giorni");
+      if(days < 0) return this._t("expired_since",{n:Math.abs(days)});
       if(days === 0) return "Oggi";
       if(days === 1) return "Domani";
-      return "Tra " + days + " giorni";
+      return this._t("expires_in",{n:days});
     }
     return d + "/" + m + "/" + y;
   }
@@ -144,7 +303,7 @@ class SmartHomePantryCard extends HTMLElement {
 
     const hero = this._el("div", {background:"linear-gradient(135deg,#5b6df0 0%,#7c4dff 100%)", color:"#fff", padding:"18px 18px 22px", borderRadius:"16px 16px 0 0"});
 
-    const h2 = this._el("h2", {margin:"0 0 14px", fontSize:"20px", fontWeight:"700", display:"flex", alignItems:"center", gap:"8px"}, {text:"\ud83d\udce6 Smart Home Pantry"});
+    const h2 = this._el("h2", {margin:"0 0 14px", fontSize:"20px", fontWeight:"700", display:"flex", alignItems:"center", gap:"8px"}, {text:this._t("title")});
     hero.appendChild(h2);
     const stats = this._el("div", {display:"flex", gap:"10px"});
     const mkStat=(n,l,bg)=>{
@@ -153,9 +312,9 @@ class SmartHomePantryCard extends HTMLElement {
       s.appendChild(this._el("div",{fontSize:"11px",opacity:".9",marginTop:"4px",textTransform:"uppercase",letterSpacing:".4px"},{text:l}));
       return s;
     };
-    stats.appendChild(mkStat(totalQty,"Totali","rgba(255,255,255,.16)"));
-    stats.appendChild(mkStat(expiringCount,"In scadenza", expiringCount>0?"rgba(251,140,0,.35)":"rgba(255,255,255,.16)"));
-    stats.appendChild(mkStat(expiredCount,"Scaduti", expiredCount>0?"rgba(229,57,53,.4)":"rgba(255,255,255,.16)"));
+    stats.appendChild(mkStat(totalQty,this._t("stat_total"),"rgba(255,255,255,.16)"));
+    stats.appendChild(mkStat(expiringCount,this._t("stat_expiring"), expiringCount>0?"rgba(251,140,0,.35)":"rgba(255,255,255,.16)"));
+    stats.appendChild(mkStat(expiredCount,this._t("stat_expired"), expiredCount>0?"rgba(229,57,53,.4)":"rgba(255,255,255,.16)"));
     hero.appendChild(stats);
 
     if(nextExpiry){
@@ -163,13 +322,13 @@ class SmartHomePantryCard extends HTMLElement {
       let testo;
       if(S.dateFormat === "relative"){
 
-        testo = "\u23f3 Prossima scadenza: " + this._fmtDate(nextExpiry, "relative", dd).toLowerCase();
+        testo = this._t("next_expiry") + this._fmtDate(nextExpiry, "relative", dd).toLowerCase();
       } else {
         let when="";
-        if(dd===0) when=" (oggi)";
+        if(dd===0) when=this._t("today_paren");
         else if(dd===1) when=" (domani)";
-        else if(dd>1) when=" (tra "+dd+" giorni)";
-        testo = "\u23f3 Prossima scadenza: " + this._fmtDate(nextExpiry, S.dateFormat, dd) + when;
+        else if(dd>1) when=this._t("in_days_paren",{n:dd});
+        testo = this._t("next_expiry") + this._fmtDate(nextExpiry, S.dateFormat, dd) + when;
       }
       const nextRow=this._el("div",{
         marginTop:"12px",
@@ -197,8 +356,8 @@ class SmartHomePantryCard extends HTMLElement {
         gap:"8px"
       });
       const label = expiredCount === 1
-        ? "1 prodotto scaduto"
-        : expiredCount + " prodotti scaduti";
+        ? this._t("expired_one")
+        : this._t("expired_many",{n:expiredCount});
       expRow.appendChild(this._el("div",{flex:"1",minWidth:"120px",fontWeight:"600"},{text:"\u26d4 "+label}));
 
       const miniBtn=(text,bg)=>this._el("button",{
@@ -268,38 +427,38 @@ class SmartHomePantryCard extends HTMLElement {
     groups.sort(sorters[S.sortOrder] || sorters.expiry);
 
     if(groups.length===0){
-      body.appendChild(this._el("div",{textAlign:"center",color:secondaryText,padding:"26px 10px",fontSize:"15px"},{html:"\ud83e\uded9 La dispensa e' vuota.<br>Tocca <b>Aggiungi</b> per scansionare un prodotto."}));
+      body.appendChild(this._el("div",{textAlign:"center",color:secondaryText,padding:"26px 10px",fontSize:"15px"},{html:this._t("empty")}));
     }
 
     groups.forEach(g=>{
       const grp=this._el("div",{background:cardBg,border:"1px solid "+divider,borderRadius:"14px",marginBottom:"10px",overflow:"hidden",boxShadow:"0 1px 3px rgba(0,0,0,.06)"});
       const hd=this._el("div",{display:"flex",alignItems:"center",gap:"12px",padding:"12px 14px",background:secBg});
       hd.appendChild(this._el("div",{fontSize:"26px",width:"40px",height:"40px",display:"flex",alignItems:"center",justifyContent:"center",background:cardBg,borderRadius:"10px",boxShadow:"0 1px 2px rgba(0,0,0,.12)",flex:"0 0 auto"},{text:this._categoryEmoji(g.name)}));
-      hd.appendChild(this._el("div",{fontWeight:"700",fontSize:"15px",color:primaryText,flex:"1",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"},{text:g.name||"Senza nome"}));
+      hd.appendChild(this._el("div",{fontWeight:"700",fontSize:"15px",color:primaryText,flex:"1",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"},{text:g.name||this._t("no_name")}));
       hd.appendChild(this._el("div",{fontSize:"13px",fontWeight:"800",color:"#fff",background:BLUE,borderRadius:"999px",padding:"3px 10px",flex:"0 0 auto"},{text:String(g.total)}));
       grp.appendChild(hd);
 
       const lots=this._el("div",{padding:"6px 10px 10px"});
       g.lots.slice().sort((a,b)=>(a.expiry_date||"9999-12-31").localeCompare(b.expiry_date||"9999-12-31")).forEach(l=>{
         const dd=daysTo(l.expiry_date);
-        let barColor=GREEN, subColor=secondaryText, sub="Nessuna scadenza";
+        let barColor=GREEN, subColor=secondaryText, sub=this._t("no_expiry");
         if(dd!==null){
           if(dd<0){
             barColor=RED; subColor=RED;
-            sub="Scaduto da "+Math.abs(dd)+" "+(Math.abs(dd)===1?"giorno":"giorni");
+            sub=this._t("expired_since",{n:Math.abs(dd)});
           } else if(dd===0){
             barColor=RED; subColor=RED;
-            sub="Scade oggi!";
+            sub=this._t("expires_today");
           } else if(dd<=S.daysCritical){
 
             barColor=RED; subColor=RED;
-            sub="Scade tra "+dd+" "+(dd===1?"giorno":"giorni")+"!";
+            sub=this._t("expires_in",{n:dd})+"!";
           } else if(dd<=S.daysBefore){
 
             barColor=ORANGE; subColor=ORANGE;
-            sub="Scade tra "+dd+" "+(dd===1?"giorno":"giorni");
+            sub=this._t("expires_in",{n:dd});
           } else {
-            sub="Scade il "+this._fmtDate(l.expiry_date, S.dateFormat, dd);
+            sub=this._t("expires_on")+this._fmtDate(l.expiry_date, S.dateFormat, dd);
           }
         }
         const row=this._el("div",{display:"flex",alignItems:"center",gap:"10px",padding:"9px 10px",borderRadius:"10px"});
@@ -325,28 +484,28 @@ class SmartHomePantryCard extends HTMLElement {
       const b=this._el("button",{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",padding:"11px 10px",border:"none",borderRadius:"12px",fontSize:"14px",fontWeight:"700",cursor:"pointer",color:"#fff",background:grad},{id:id,text:label});
       return b;
     };
-    const bAdd=mkBtn("scanBtn","\ud83d\udcf7 Aggiungi","linear-gradient(135deg,#43a047,#2e7d32)");
-    const bTake=mkBtn("removeScanBtn","\ud83d\udce4 Preleva","linear-gradient(135deg,#1e88e5,#1565c0)");
-    const bRem=mkBtn("manualRemoveBtn","\u2796 Rimuovi","linear-gradient(135deg,#fb8c00,#ef6c00)");
-    const bRef=mkBtn("refreshBtn","\ud83d\udd04 Aggiorna","linear-gradient(135deg,#8e24aa,#6a1b9a)");
-    const bClr=mkBtn("clearBtn","\ud83d\uddd1\ufe0f Svuota","linear-gradient(135deg,#e53935,#c62828)");
+    const bAdd=mkBtn("scanBtn",this._t("btn_add"),"linear-gradient(135deg,#43a047,#2e7d32)");
+    const bTake=mkBtn("removeScanBtn",this._t("btn_take"),"linear-gradient(135deg,#1e88e5,#1565c0)");
+    const bRem=mkBtn("manualRemoveBtn",this._t("btn_remove"),"linear-gradient(135deg,#fb8c00,#ef6c00)");
+    const bRef=mkBtn("refreshBtn",this._t("btn_refresh"),"linear-gradient(135deg,#8e24aa,#6a1b9a)");
+    const bClr=mkBtn("clearBtn",this._t("btn_clear"),"linear-gradient(135deg,#e53935,#c62828)");
     actions.appendChild(bAdd); actions.appendChild(bTake); actions.appendChild(bRem); actions.appendChild(bRef); actions.appendChild(bClr);
     body.appendChild(actions);
 
     bRef.addEventListener("click", async (ev)=>{
-      const btn=ev.currentTarget; btn.disabled=true; btn.textContent="\u23f3 Aggiorno...";
+      const btn=ev.currentTarget; btn.disabled=true; btn.textContent=this._t("refreshing");
       try{
         await this._hass.callService("smart_home_pantry","refresh",{});
-        this.dispatchEvent(new CustomEvent("hass-notification",{detail:{message:"Dispensa aggiornata"},bubbles:true,composed:true}));
-      }catch(err){ console.error(err); alert("Errore durante l'aggiornamento"); }
+        this.dispatchEvent(new CustomEvent("hass-notification",{detail:{message:this._t("pantry_updated")},bubbles:true,composed:true}));
+      }catch(err){ console.error(err); alert(this._t("err_update")); }
       finally{ this._render(true); }
     });
 
     bClr.addEventListener("click", async ()=>{
-      const conf=prompt("Digita SVUOTA per confermare");
-      if(conf!=="SVUOTA") return;
-      try{ await this._hass.callService("smart_home_pantry","clear_pantry",{}); alert("Dispensa svuotata"); this._render(true); }
-      catch(err){ console.error(err); alert("Errore durante lo svuotamento"); }
+      const conf=prompt(this._t("confirm_clear"));
+      if(conf!==this._t("confirm_clear_word")) return;
+      try{ await this._hass.callService("smart_home_pantry","clear_pantry",{}); alert(this._t("pantry_cleared")); this._render(true); }
+      catch(err){ console.error(err); alert(this._t("err_clear")); }
     });
 
     bRem.addEventListener("click", ()=>this._openManualRemove(stateObj));
@@ -371,7 +530,7 @@ class SmartHomePantryCard extends HTMLElement {
     if(!barcode) return;
     if(mode==="add"){ this._handleScannedBarcode(barcode); }
     else {
-      const qtyStr=prompt("Quanti pezzi vuoi rimuovere?","1");
+      const qtyStr=prompt(this._t("ask_qty_remove"),"1");
       const qty=Math.max(1,parseInt(qtyStr||"1",10)||1);
       this._hass.callService("smart_home_pantry","remove_quantity",{barcode,quantity:qty});
     }
@@ -416,10 +575,10 @@ class SmartHomePantryCard extends HTMLElement {
             overlay.remove();
             if(mode==="add"){ await this._handleScannedBarcode(decodedText); }
             else {
-              const qtyStr=prompt("Prodotto rilevato: "+decodedText+"\n\nQuanti pezzi vuoi rimuovere?","1");
+              const qtyStr=prompt(this._t("detected")+decodedText+"\n\n"+this._t("ask_qty_remove"),"1");
               const qty=Math.max(1,parseInt(qtyStr||"1",10)||1);
               await this._hass.callService("smart_home_pantry","remove_quantity",{barcode:decodedText,quantity:qty});
-              alert("Rimossi "+qty+" pezzi");
+              alert(this._t("removed_n",{n:qty}));
             }
           }
         );
@@ -452,7 +611,7 @@ class SmartHomePantryCard extends HTMLElement {
   async _handleScannedBarcode(barcode){
     barcode=String(barcode||"").trim();
     if(!barcode) return;
-    const wait=this._el("div",{position:"fixed",inset:"0",background:"rgba(0,0,0,.4)",zIndex:"10000",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:"18px"},{text:"\ud83d\udd0e Cerco il prodotto..."});
+    const wait=this._el("div",{position:"fixed",inset:"0",background:"rgba(0,0,0,.4)",zIndex:"10000",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:"18px"},{text:this._t("searching")});
     document.body.appendChild(wait);
     let lookup=null;
     try{ lookup=await this._lookupBarcode(barcode); }catch(e){ console.error(e); }
@@ -493,18 +652,18 @@ class SmartHomePantryCard extends HTMLElement {
     const ov=this._overlay();
     const box=this._modalBox("440px");
     const close=()=>ov.remove();
-    box.appendChild(this._modalHeader("\ud83d\udcf7 Aggiungi prodotto", close));
+    box.appendChild(this._modalHeader(this._t("modal_add"), close));
     const bodyM=this._el("div",{padding:"16px"});
 
-    bodyM.appendChild(this._label("Codice a barre"));
+    bodyM.appendChild(this._label(this._t("lbl_barcode")));
     const barInp=this._input({type:"text",value:barcode,readonly:true,width:"100%",marginBottom:"14px"});
     bodyM.appendChild(barInp);
 
-    bodyM.appendChild(this._label("Nome prodotto"+(notFound?' <span style="color:#ef6c00">(non trovato, scrivilo tu)</span>':'')));
+    bodyM.appendChild(this._label(this._t("lbl_name")+(notFound?' <span style="color:#ef6c00">(non trovato, scrivilo tu)</span>':'')));
     const nameInp=this._input({type:"text",value:foundName,placeholder:"Es. Latte parzialmente scremato",width:"100%",marginBottom:"14px",borderColor:notFound?"#ef6c00":"#ccc"});
     bodyM.appendChild(nameInp);
 
-    bodyM.appendChild(this._label("Quantita'"));
+    bodyM.appendChild(this._label(this._t("lbl_quantity")));
     const qtyRow=this._el("div",{display:"flex",alignItems:"center",gap:"8px",marginBottom:"14px"});
     const minus=this._smallBtn("\u2212"), plus=this._smallBtn("+");
     const qtyInp=this._input({type:"number",min:1,value:1,textAlign:"center",width:"70px"});
@@ -513,16 +672,16 @@ class SmartHomePantryCard extends HTMLElement {
     qtyRow.appendChild(minus); qtyRow.appendChild(qtyInp); qtyRow.appendChild(plus);
     bodyM.appendChild(qtyRow);
 
-    bodyM.appendChild(this._label("Data di scadenza"));
+    bodyM.appendChild(this._label(this._t("lbl_expiry")));
     const expRow=this._el("div",{display:"flex",alignItems:"center",gap:"8px",marginBottom:"20px"});
     const expInp=this._input({type:"date",flex:"1"});
-    const noDate=this._el("button",{height:"36px",padding:"0 10px",borderRadius:"6px",border:"1px solid #ccc",background:"#e9e9e9",color:"#1c1c1c",cursor:"pointer"},{text:"Nessuna",on:{click:()=>expInp.value=""}});
+    const noDate=this._el("button",{height:"36px",padding:"0 10px",borderRadius:"6px",border:"1px solid #ccc",background:"#e9e9e9",color:"#1c1c1c",cursor:"pointer"},{text:this._t("none_f"),on:{click:()=>expInp.value=""}});
     expRow.appendChild(expInp); expRow.appendChild(noDate);
     bodyM.appendChild(expRow);
 
     const btnRow=this._el("div",{display:"flex",justifyContent:"flex-end",gap:"8px"});
-    const cancel=this._btn("Annulla"); cancel.onclick=close;
-    const save=this._btn("Aggiungi","green");
+    const cancel=this._btn(this._t("cancel")); cancel.onclick=close;
+    const save=this._btn(this._t("btn_add_plain"),"green");
     btnRow.appendChild(cancel); btnRow.appendChild(save);
     bodyM.appendChild(btnRow);
 
@@ -532,15 +691,15 @@ class SmartHomePantryCard extends HTMLElement {
 
     save.onclick=async()=>{
       const name=nameInp.value.trim();
-      if(!name){ alert("Inserisci un nome per il prodotto."); nameInp.focus(); return; }
+      if(!name){ alert(this._t("ask_name")); nameInp.focus(); return; }
       let qty=parseInt(qtyInp.value,10); if(isNaN(qty)||qty<1) qty=1;
       const expiry=expInp.value||null;
       save.disabled=true; save.textContent="...";
       try{
         for(let i=0;i<qty;i++){ await this._hass.callService("smart_home_pantry","add_product",{barcode:barcode,name:name,expiry_date:expiry}); }
-        this.dispatchEvent(new CustomEvent("hass-notification",{detail:{message:"Aggiunti "+qty+" \u00d7 "+name},bubbles:true,composed:true}));
+        this.dispatchEvent(new CustomEvent("hass-notification",{detail:{message:this._t("added_n",{n:qty})+" \u00d7 "+name},bubbles:true,composed:true}));
         close();
-      }catch(err){ console.error(err); alert("Errore durante l'aggiunta"); save.disabled=false; save.textContent="Aggiungi"; }
+      }catch(err){ console.error(err); alert(this._t("err_add")); save.disabled=false; save.textContent=this._t("btn_add_plain"); }
     };
   }
 
@@ -548,30 +707,30 @@ class SmartHomePantryCard extends HTMLElement {
     const ov=this._overlay();
     const box=this._modalBox("420px");
     const close=()=>ov.remove();
-    box.appendChild(this._modalHeader("\u270f\ufe0f Modifica lotto", close));
+    box.appendChild(this._modalHeader(this._t("modal_edit"), close));
     const bodyM=this._el("div",{padding:"16px"});
     bodyM.appendChild(this._el("div",{fontWeight:"bold",color:"#1c1c1c",marginBottom:"12px"},{text:lot.name||lot.barcode}));
 
-    bodyM.appendChild(this._label("Quantita'"));
+    bodyM.appendChild(this._label(this._t("lbl_quantity")));
     const qtyRow=this._el("div",{display:"flex",alignItems:"center",gap:"8px",marginBottom:"16px"});
     const minus=this._smallBtn("\u2212"), plus=this._smallBtn("+");
     const qtyInp=this._input({type:"number",min:0,value:lot.quantity,textAlign:"center",width:"70px"});
     minus.onclick=()=>qtyInp.value=Math.max(0,(parseInt(qtyInp.value,10)||0)-1);
     plus.onclick=()=>qtyInp.value=Math.max(0,(parseInt(qtyInp.value,10)||0)+1);
     qtyRow.appendChild(minus); qtyRow.appendChild(qtyInp); qtyRow.appendChild(plus);
-    qtyRow.appendChild(this._el("span",{fontSize:"12px",color:"#777"},{text:"(0 = rimuovi lotto)"}));
+    qtyRow.appendChild(this._el("span",{fontSize:"12px",color:"#777"},{text:this._t("remove_lot_hint")}));
     bodyM.appendChild(qtyRow);
 
-    bodyM.appendChild(this._label("Data di scadenza"));
+    bodyM.appendChild(this._label(this._t("lbl_expiry")));
     const expRow=this._el("div",{display:"flex",alignItems:"center",gap:"8px",marginBottom:"20px"});
     const expInp=this._input({type:"date",value:lot.expiry||"",flex:"1"});
-    const noDate=this._el("button",{height:"36px",padding:"0 10px",borderRadius:"6px",border:"1px solid #ccc",background:"#e9e9e9",color:"#1c1c1c",cursor:"pointer"},{text:"Nessuna",on:{click:()=>expInp.value=""}});
+    const noDate=this._el("button",{height:"36px",padding:"0 10px",borderRadius:"6px",border:"1px solid #ccc",background:"#e9e9e9",color:"#1c1c1c",cursor:"pointer"},{text:this._t("none_f"),on:{click:()=>expInp.value=""}});
     expRow.appendChild(expInp); expRow.appendChild(noDate);
     bodyM.appendChild(expRow);
 
     const btnRow=this._el("div",{display:"flex",justifyContent:"flex-end",gap:"8px"});
-    const cancel=this._btn("Annulla"); cancel.onclick=close;
-    const save=this._btn("Salva","blue");
+    const cancel=this._btn(this._t("cancel")); cancel.onclick=close;
+    const save=this._btn(this._t("save"),"blue");
     btnRow.appendChild(cancel); btnRow.appendChild(save);
     bodyM.appendChild(btnRow);
 
@@ -584,16 +743,16 @@ class SmartHomePantryCard extends HTMLElement {
       const qtyChanged=newQty!==lot.quantity;
       const expiryChanged=newExpiry!==(lot.expiry||null);
       if(!qtyChanged&&!expiryChanged){ close(); return; }
-      if(newQty===0&&!confirm("Rimuovere completamente questo lotto di "+(lot.name||lot.barcode)+"?")) return;
+      if(newQty===0&&!confirm(this._t("confirm_remove_lot")+(lot.name||lot.barcode)+"?")) return;
       const payload={barcode:lot.barcode,old_expiry_date:lot.expiry||""};
       if(qtyChanged) payload.quantity=newQty;
       if(expiryChanged) payload.new_expiry_date=newExpiry||"";
       save.disabled=true; save.textContent="...";
       try{
         await this._hass.callService("smart_home_pantry","update_lot",payload);
-        this.dispatchEvent(new CustomEvent("hass-notification",{detail:{message:"Lotto aggiornato"},bubbles:true,composed:true}));
+        this.dispatchEvent(new CustomEvent("hass-notification",{detail:{message:this._t("lot_updated")},bubbles:true,composed:true}));
         close();
-      }catch(err){ console.error(err); alert("Errore durante la modifica"); save.disabled=false; save.textContent="Salva"; }
+      }catch(err){ console.error(err); alert(this._t("err_edit")); save.disabled=false; save.textContent=this._t("save"); }
     };
   }
 
@@ -607,42 +766,42 @@ class SmartHomePantryCard extends HTMLElement {
       if(e&&(groups[key].next===null||e<groups[key].next)) groups[key].next=e;
     });
     const list=Object.values(groups).filter(g=>g.total>0);
-    if(list.length===0){ alert("La dispensa e' vuota, niente da rimuovere."); return; }
+    if(list.length===0){ alert(this._t("empty_short")); return; }
     list.sort((a,b)=>(a.next||"9999-12-31").localeCompare(b.next||"9999-12-31")||(a.name||"").localeCompare(b.name||""));
 
     const ov=this._overlay();
     const box=this._modalBox("520px");
     this._s(box,{maxHeight:"80vh",display:"flex",flexDirection:"column"});
     const close=()=>ov.remove();
-    box.appendChild(this._modalHeader("\u2796 Rimozione manuale", close));
-    box.appendChild(this._el("div",{fontSize:"12px",color:"#777",padding:"8px 16px 0"},{text:"I pezzi vengono tolti dal lotto che scade prima (FEFO)."}));
+    box.appendChild(this._modalHeader(this._t("modal_remove"), close));
+    box.appendChild(this._el("div",{fontSize:"12px",color:"#777",padding:"8px 16px 0"},{text:this._t("fefo_note")}));
     const listWrap=this._el("div",{overflowY:"auto",padding:"8px 16px 16px"});
 
     list.forEach(g=>{
       const row=this._el("div",{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"8px",padding:"10px",borderBottom:"1px solid #eee"});
       const info=this._el("div",{});
       info.appendChild(this._el("div",{fontWeight:"bold",color:"#1c1c1c"},{text:g.name||g.barcode}));
-      info.appendChild(this._el("div",{fontSize:"12px",color:"#777"},{text:"Disponibili: "+g.total+(g.next?" \u00b7 prima scadenza: "+g.next:"")}));
+      info.appendChild(this._el("div",{fontSize:"12px",color:"#777"},{text:this._t("available")+g.total+(g.next?this._t("first_expiry")+g.next:"")}));
       row.appendChild(info);
       const ctrl=this._el("div",{display:"flex",alignItems:"center",gap:"6px"});
       const minus=this._el("button",{width:"32px",height:"32px",fontSize:"18px",borderRadius:"6px",border:"1px solid #ccc",background:"#e9e9e9",color:"#1c1c1c",cursor:"pointer"},{text:"\u2212"});
       const qtyInp=this._input({type:"number",min:1,max:g.total,value:1,textAlign:"center",width:"52px"});
       const plus=this._el("button",{width:"32px",height:"32px",fontSize:"18px",borderRadius:"6px",border:"1px solid #ccc",background:"#e9e9e9",color:"#1c1c1c",cursor:"pointer"},{text:"+"});
-      const remBtn=this._el("button",{height:"34px",padding:"0 10px",borderRadius:"6px",border:"none",background:"#d32f2f",color:"#fff",fontWeight:"bold",cursor:"pointer"},{text:"Rimuovi"});
+      const remBtn=this._el("button",{height:"34px",padding:"0 10px",borderRadius:"6px",border:"none",background:"#d32f2f",color:"#fff",fontWeight:"bold",cursor:"pointer"},{text:this._t("remove")});
       const clamp=()=>{ let v=parseInt(qtyInp.value,10); if(isNaN(v)||v<1)v=1; if(v>g.total)v=g.total; qtyInp.value=v; return v; };
       minus.onclick=()=>qtyInp.value=Math.max(1,(parseInt(qtyInp.value,10)||1)-1);
       plus.onclick=()=>qtyInp.value=Math.min(g.total,(parseInt(qtyInp.value,10)||1)+1);
       qtyInp.onchange=clamp;
       remBtn.onclick=async()=>{
         const qty=clamp();
-        if(!g.barcode){ alert("Questo prodotto non ha codice a barre: non rimovibile da qui."); return; }
-        if(!confirm("Rimuovere "+qty+" \u00d7 "+(g.name||g.barcode)+"?")) return;
+        if(!g.barcode){ alert(this._t("no_barcode_item")); return; }
+        if(!confirm(this._t("confirm_remove_item",{n:qty,name:(g.name||g.barcode)}))) return;
         remBtn.disabled=true; remBtn.textContent="...";
         try{
           await this._hass.callService("smart_home_pantry","remove_quantity",{barcode:g.barcode,quantity:qty});
-          this.dispatchEvent(new CustomEvent("hass-notification",{detail:{message:"Rimossi "+qty+" \u00d7 "+(g.name||g.barcode)},bubbles:true,composed:true}));
+          this.dispatchEvent(new CustomEvent("hass-notification",{detail:{message:this._t("removed_n",{n:qty})+" \u00d7 "+(g.name||g.barcode)},bubbles:true,composed:true}));
           close();
-        }catch(err){ console.error(err); alert("Errore durante la rimozione"); remBtn.disabled=false; remBtn.textContent="Rimuovi"; }
+        }catch(err){ console.error(err); alert(this._t("err_remove")); remBtn.disabled=false; remBtn.textContent=this._t("remove"); }
       };
       ctrl.appendChild(minus); ctrl.appendChild(qtyInp); ctrl.appendChild(plus); ctrl.appendChild(remBtn);
       row.appendChild(ctrl);
@@ -670,27 +829,27 @@ class SmartHomePantryCard extends HTMLElement {
       a.remove();
     }catch(err){
       console.error("Download export fallito", err);
-      alert("Non e' stato possibile scaricare il file.");
+      alert(this._t("err_download"));
     }finally{
       if(btn){ btn.disabled = false; btn.textContent = originale; }
     }
   }
 
   async _clearExpired(count, btn){
-    const quanti = count === 1 ? "1 prodotto scaduto" : count + " prodotti scaduti";
-    if(!confirm("Rimuovere " + quanti + " dalla dispensa?\n\nL'operazione non e' reversibile: se ti serve la lista, scaricala prima in Excel.")) return;
+    const quanti = count === 1 ? this._t("expired_one") : this._t("expired_many",{n:count});
+    if(!confirm(this._t("confirm_remove_expired",{items:quanti}))) return;
     const originale = btn ? btn.textContent : null;
     if(btn){ btn.disabled = true; btn.textContent = "..."; }
     try{
       await this._hass.callService("smart_home_pantry", "clear_expired", {});
       this.dispatchEvent(new CustomEvent("hass-notification",{
-        detail:{message:"Prodotti scaduti rimossi"},
+        detail:{message:this._t("expired_cleared")},
         bubbles:true, composed:true
       }));
       this._render(true);
     }catch(err){
       console.error("clear_expired fallito", err);
-      alert("Errore durante la rimozione dei prodotti scaduti.");
+      alert(this._t("err_remove_expired"));
       if(btn){ btn.disabled = false; btn.textContent = originale; }
     }
   }
