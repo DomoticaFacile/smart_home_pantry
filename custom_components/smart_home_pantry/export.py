@@ -54,7 +54,6 @@ def build_xlsx(rows, sheet_name="Prodotti scaduti"):
         "</worksheet>"
     ).format(cols=cols_xml, rows="".join(sheet_rows))
 
-    # --- workbook ---
     workbook_xml = (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
