@@ -21,7 +21,6 @@ CONF_NOTIFY_SERVICES = "notify_services"
 CONF_PERSISTENT_ENABLED = "persistent_enabled"
 CONF_PUSH_ENABLED = "push_enabled"
 
-# Opzioni di visualizzazione della card
 CONF_DATE_FORMAT = "date_format"
 CONF_DAYS_CRITICAL = "days_critical"
 CONF_SIDEBAR_ENABLED = "sidebar_enabled"
