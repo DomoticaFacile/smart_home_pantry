@@ -693,18 +693,13 @@ async def async_setup_entry(hass, entry):
         _LOGGER.exception("Errore controllo scadenze all'avvio: %s", err)
 
     services = hass.services
-    if not services.has_service(DOMAIN, "scan_barcode"):
-        services.async_register(DOMAIN, "scan_barcode", handle_scan)
-    if not services.has_service(DOMAIN, "add_product"):
-        services.async_register(DOMAIN, "add_product", handle_add)
-    if not services.has_service(DOMAIN, "remove_product"):
-        services.async_register(DOMAIN, "remove_product", handle_remove)
+    services.async_register(DOMAIN, "scan_barcode", handle_scan)
+    services.async_register(DOMAIN, "add_product", handle_add)
+    services.async_register(DOMAIN, "remove_product", handle_remove)
     services.async_register(DOMAIN, "refresh", handle_refresh)
     services.async_register(DOMAIN, "remove_quantity", handle_remove_quantity)
-    if not services.has_service(DOMAIN, "clear_pantry"):
-        services.async_register(DOMAIN, "clear_pantry", handle_clear)
-    if not services.has_service(DOMAIN, "update_quantity"):
-        services.async_register(DOMAIN, "update_quantity", handle_update_quantity)
+    services.async_register(DOMAIN, "clear_pantry", handle_clear)
+    services.async_register(DOMAIN, "update_quantity", handle_update_quantity)
     services.async_register(DOMAIN, "update_lot", handle_update_lot)
     services.async_register(DOMAIN, "clear_cache", handle_clear_cache)
     services.async_register(DOMAIN, "lookup_barcode", handle_lookup_barcode)
@@ -716,6 +711,23 @@ async def async_setup_entry(hass, entry):
 
 async def async_unload_entry(hass, entry):
     domain_data = hass.data.get(DOMAIN, {})
+
+    for service_name in (
+        "scan_barcode",
+        "add_product",
+        "remove_product",
+        "refresh",
+        "remove_quantity",
+        "clear_pantry",
+        "update_quantity",
+        "update_lot",
+        "clear_cache",
+        "lookup_barcode",
+        "clear_expired",
+        "export_expired",
+    ):
+        if hass.services.has_service(DOMAIN, service_name):
+            hass.services.async_remove(DOMAIN, service_name)
 
     unsub_time_change = domain_data.pop("unsub_time_change", None)
     if unsub_time_change:
