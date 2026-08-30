@@ -10,7 +10,7 @@ _LOGGER = logging.getLogger(__name__)
 
 BASE_URL = "https://world.openfoodfacts.org/api/v2/product/{barcode}.json?fields=product_name,brands"
 
-USER_AGENT = "SmartHomePantry-HomeAssistant/0.4.0"
+USER_AGENT = "SmartHomePantry-HomeAssistant/0.4.1"
 
 CACHE_TTL_SECONDS = 60 * 60 * 24 * 30
 
