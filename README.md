@@ -330,6 +330,19 @@ custom_components/smart_home_pantry/translations/[lang].json
 
 ---
 
+## 📷 Barcode scanner & HTTPS
+
+The barcode scanner uses your device camera, which browsers only allow over a **secure (HTTPS) connection**.
+
+- 🍎 **On iPhone (Safari and the Companion app)** the camera is blocked over `http://` — this is an iOS restriction, not a bug. You **must** access Home Assistant over HTTPS for the scanner to work.
+- 🤖 **On Android** it often works over `http://` too, but this isn't guaranteed and may change with Chrome updates.
+
+👉 **HTTPS is recommended for reliable scanning on all devices.** You can get it via [Nabu Casa](https://www.nabucasa.com/) (automatic), a reverse proxy with an SSL certificate, or by configuring SSL directly in Home Assistant.
+
+When the camera isn't available, you can always **enter the barcode manually** from the card.
+
+---
+
 👨‍💻 Developer
 
 Created with ❤️ by www.domoticafacile.it
@@ -678,6 +691,19 @@ Se vedi errori tipo JSONDecodeError, il file non è un JSON valido (attenzione a
 Se le traduzioni non compaiono, verifica il percorso:
 
 custom_components/smart_home_pantry/translations/[lingua].json
+
+---
+
+## 📷 Scanner del codice a barre e HTTPS
+
+Lo scanner usa la fotocamera del dispositivo, che i browser consentono solo tramite **connessione sicura (HTTPS)**.
+
+- 🍎 **Su iPhone (Safari e app Companion)** la fotocamera e' bloccata su `http://` — e' una restrizione di iOS, non un bug. Per usare lo scanner **devi** accedere a Home Assistant in HTTPS.
+- 🤖 **Su Android** spesso funziona anche in `http://`, ma non e' garantito e puo' cambiare con gli aggiornamenti di Chrome.
+
+👉 **L'HTTPS e' consigliato per una scansione affidabile su tutti i dispositivi.** Puoi ottenerlo tramite [Nabu Casa](https://www.nabucasa.com/) (automatico), un reverse proxy con certificato SSL, oppure configurando SSL direttamente in Home Assistant.
+
+Quando la fotocamera non e' disponibile, puoi sempre **inserire il codice a barre a mano** dalla card.
 
 ---
 
