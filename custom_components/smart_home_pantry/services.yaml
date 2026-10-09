@@ -1,6 +1,6 @@
 scan_barcode:
   name: Scan Barcode
-  description: Aggiunge un pezzo del prodotto identificato dal codice a barre (cerca nome/marca su OpenFoodFacts). Se esiste gia un lotto con la stessa scadenza, ne incrementa la quantita.
+  description: Aggiunge un pezzo del prodotto identificato dal codice a barre (cerca nome/marca su OpenFoodFacts). Se esiste gia un lotto con la stessa scadenza e posizione, ne incrementa la quantita.
   fields:
     barcode:
       name: Codice a barre
@@ -16,6 +16,13 @@ scan_barcode:
       example: "2025-12-31"
       selector:
         date:
+    location:
+      name: Posizione
+      description: Dove e' conservato il prodotto (es. dispensa, frigo, freezer). Facoltativa.
+      required: false
+      example: "frigo"
+      selector:
+        text:
 
 add_product:
   name: Add Product
@@ -49,6 +56,13 @@ add_product:
       example: "2025-12-31"
       selector:
         date:
+    location:
+      name: Posizione
+      description: Dove e' conservato il prodotto (es. dispensa, frigo, freezer). Facoltativa.
+      required: false
+      example: "dispensa"
+      selector:
+        text:
 
 remove_product:
   name: Remove Product

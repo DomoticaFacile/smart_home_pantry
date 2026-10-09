@@ -93,7 +93,7 @@ async def async_setup_entry(hass, entry):
 
     merged={}
     for p in data["products"]:
-        k=(p.get("barcode"), p.get("expiry_date"))
+        k=(p.get("barcode"), p.get("expiry_date"), p.get("location") or "")
         if k not in merged:
             merged[k]=p.copy()
         else:
@@ -102,6 +102,7 @@ async def async_setup_entry(hass, entry):
     data["unique_products"]=len(data["products"])
     for p in data["products"]:
         p.setdefault("expiry_date", None)
+        p.setdefault("location", "")
 
     data.setdefault("expiring_count", 0)
     data.setdefault("expired_count", 0)
@@ -325,6 +326,7 @@ async def async_setup_entry(hass, entry):
             await cache_store.async_save(barcode_cache)
 
         expiry_date = call.data.get("expiry_date")
+        location = call.data.get("location") or ""
         now = datetime.now().isoformat()
 
         data["last_barcode"] = barcode
@@ -334,7 +336,7 @@ async def async_setup_entry(hass, entry):
 
         found = False
         for p in data["products"]:
-            if p["barcode"] == barcode and p.get("expiry_date") == expiry_date:
+            if p["barcode"] == barcode and p.get("expiry_date") == expiry_date and (p.get("location") or "") == location:
                 p["quantity"] = p.get("quantity", 1) + 1
                 p["last_scan"] = now
                 if expiry_date:
@@ -350,7 +352,8 @@ async def async_setup_entry(hass, entry):
                 "quantity": 1,
                 "added": now,
                 "last_scan": now,
-                "expiry_date": expiry_date
+                "expiry_date": expiry_date,
+                "location": location
             })
 
         data["unique_products"] = len(data["products"])
@@ -362,6 +365,7 @@ async def async_setup_entry(hass, entry):
         name = call.data.get("name", "Manual Product")
         brand = call.data.get("brand", "")
         expiry_date = call.data.get("expiry_date")
+        location = call.data.get("location") or ""
         now = datetime.now().isoformat()
 
         data["last_barcode"] = barcode
@@ -371,7 +375,7 @@ async def async_setup_entry(hass, entry):
 
         found = False
         for p in data["products"]:
-            if p["barcode"] == barcode and p.get("expiry_date") == expiry_date:
+            if p["barcode"] == barcode and p.get("expiry_date") == expiry_date and (p.get("location") or "") == location:
                 p["quantity"] = p.get("quantity",1) + 1
                 p["last_scan"] = now
                 found = True
@@ -385,7 +389,8 @@ async def async_setup_entry(hass, entry):
                 "quantity": 1,
                 "added": now,
                 "last_scan": now,
-                "expiry_date": expiry_date
+                "expiry_date": expiry_date,
+                "location": location
             })
 
         data["unique_products"] = len(data["products"])
