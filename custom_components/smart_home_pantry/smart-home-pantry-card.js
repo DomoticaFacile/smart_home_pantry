@@ -69,6 +69,14 @@ const SHP_I18N = {
     btn_add_plain: "Aggiungi",
     refreshing: "\u23f3 Aggiorno...",
     confirm_remove_expired: "Rimuovere {items} dalla dispensa?\n\nL'operazione non e' reversibile: se ti serve la lista, scaricala prima in Excel.",
+    btn_manual: "\u270f\ufe0f Aggiungi manualmente",
+    modal_manual: "\u270f\ufe0f Aggiungi manualmente",
+    name_placeholder: "Es. Latte parzialmente scremato",
+    not_found_hint: " (non trovato, scrivilo tu)",
+    today: "Oggi",
+    tomorrow: "Domani",
+    tomorrow_paren: " (domani)",
+    entity_not_found: "Entita' non trovata",
     support: "\u2615 Sostieni il progetto"
   },
   en: {
@@ -139,6 +147,14 @@ const SHP_I18N = {
     btn_add_plain: "Add",
     refreshing: "\u23f3 Refreshing...",
     confirm_remove_expired: "Remove {items} from the pantry?\n\nThis cannot be undone: if you need the list, download it to Excel first.",
+    btn_manual: "\u270f\ufe0f Add manually",
+    modal_manual: "\u270f\ufe0f Add manually",
+    name_placeholder: "e.g. Semi-skimmed milk",
+    not_found_hint: " (not found, type it yourself)",
+    today: "Today",
+    tomorrow: "Tomorrow",
+    tomorrow_paren: " (tomorrow)",
+    entity_not_found: "Entity not found",
     support: "\u2615 Support the project"
   }
 };
@@ -191,8 +207,8 @@ class SmartHomePantryCard extends HTMLElement {
     if(fmt === "relative"){
       if(days === null || days === undefined) return d + "/" + m + "/" + y;
       if(days < 0) return this._t("expired_since",{n:Math.abs(days)});
-      if(days === 0) return "Oggi";
-      if(days === 1) return "Domani";
+      if(days === 0) return this._t("today");
+      if(days === 1) return this._t("tomorrow");
       return this._t("expires_in",{n:days});
     }
     return d + "/" + m + "/" + y;
@@ -255,7 +271,7 @@ class SmartHomePantryCard extends HTMLElement {
     }
 
     if(!stateObj){
-      this.content.textContent = "Entita' non trovata";
+      this.content.textContent = this._t("entity_not_found");
       this._lastRenderHash = null;
       return;
     }
@@ -326,7 +342,7 @@ class SmartHomePantryCard extends HTMLElement {
       } else {
         let when="";
         if(dd===0) when=this._t("today_paren");
-        else if(dd===1) when=" (domani)";
+        else if(dd===1) when=this._t("tomorrow_paren");
         else if(dd>1) when=this._t("in_days_paren",{n:dd});
         testo = this._t("next_expiry") + this._fmtDate(nextExpiry, S.dateFormat, dd) + when;
       }
@@ -485,11 +501,12 @@ class SmartHomePantryCard extends HTMLElement {
       return b;
     };
     const bAdd=mkBtn("scanBtn",this._t("btn_add"),"linear-gradient(135deg,#43a047,#2e7d32)");
+    const bManual=mkBtn("manualAddBtn",this._t("btn_manual"),"linear-gradient(135deg,#00897b,#00695c)");
     const bTake=mkBtn("removeScanBtn",this._t("btn_take"),"linear-gradient(135deg,#1e88e5,#1565c0)");
     const bRem=mkBtn("manualRemoveBtn",this._t("btn_remove"),"linear-gradient(135deg,#fb8c00,#ef6c00)");
     const bRef=mkBtn("refreshBtn",this._t("btn_refresh"),"linear-gradient(135deg,#8e24aa,#6a1b9a)");
     const bClr=mkBtn("clearBtn",this._t("btn_clear"),"linear-gradient(135deg,#e53935,#c62828)");
-    actions.appendChild(bAdd); actions.appendChild(bTake); actions.appendChild(bRem); actions.appendChild(bRef); actions.appendChild(bClr);
+    actions.appendChild(bAdd); actions.appendChild(bManual); actions.appendChild(bTake); actions.appendChild(bRem); actions.appendChild(bRef); actions.appendChild(bClr);
     body.appendChild(actions);
 
     bRef.addEventListener("click", async (ev)=>{
@@ -511,6 +528,7 @@ class SmartHomePantryCard extends HTMLElement {
     bRem.addEventListener("click", ()=>this._openManualRemove(stateObj));
     bTake.addEventListener("click", ()=>this._openScanner("remove"));
     bAdd.addEventListener("click", ()=>this._openScanner("add"));
+    bManual.addEventListener("click", ()=>this._openManualModal());
   }
 
   _scannerErrore(mode, motivo){
@@ -518,13 +536,13 @@ class SmartHomePantryCard extends HTMLElement {
     if(overlaySafe) overlaySafe.remove();
     let messaggio;
     if(motivo==="insecure"){
-      messaggio = "La fotocamera non e' disponibile perche' stai usando una connessione non sicura (http).\n\niPhone e Safari permettono la fotocamera solo tramite HTTPS.\n\nInserisci il codice a barre a mano:";
+      messaggio = this._t("scan_insecure");
     } else if(motivo==="denied"){
-      messaggio = "Permesso fotocamera negato.\n\nVai nelle impostazioni del browser/app e consenti l'accesso alla fotocamera, oppure inserisci il codice a mano:";
+      messaggio = this._t("scan_denied");
     } else if(motivo==="nolib"){
-      messaggio = "Impossibile caricare lo scanner (libreria non raggiungibile).\n\nInserisci il codice a barre a mano:";
+      messaggio = this._t("scan_nolib");
     } else {
-      messaggio = "Scanner non disponibile.\n\nInserisci il codice a barre a mano:";
+      messaggio = this._t("scan_generic");
     }
     const barcode = prompt(messaggio);
     if(!barcode) return;
@@ -659,8 +677,8 @@ class SmartHomePantryCard extends HTMLElement {
     const barInp=this._input({type:"text",value:barcode,readonly:true,width:"100%",marginBottom:"14px"});
     bodyM.appendChild(barInp);
 
-    bodyM.appendChild(this._label(this._t("lbl_name")+(notFound?' <span style="color:#ef6c00">(non trovato, scrivilo tu)</span>':'')));
-    const nameInp=this._input({type:"text",value:foundName,placeholder:"Es. Latte parzialmente scremato",width:"100%",marginBottom:"14px",borderColor:notFound?"#ef6c00":"#ccc"});
+    bodyM.appendChild(this._label(this._t("lbl_name")+(notFound?' <span style="color:#ef6c00">'+this._t("not_found_hint")+'</span>':'')));
+    const nameInp=this._input({type:"text",value:foundName,placeholder:this._t("name_placeholder"),width:"100%",marginBottom:"14px",borderColor:notFound?"#ef6c00":"#ccc"});
     bodyM.appendChild(nameInp);
 
     bodyM.appendChild(this._label(this._t("lbl_quantity")));
@@ -694,6 +712,58 @@ class SmartHomePantryCard extends HTMLElement {
       if(!name){ alert(this._t("ask_name")); nameInp.focus(); return; }
       let qty=parseInt(qtyInp.value,10); if(isNaN(qty)||qty<1) qty=1;
       const expiry=expInp.value||null;
+      save.disabled=true; save.textContent="...";
+      try{
+        for(let i=0;i<qty;i++){ await this._hass.callService("smart_home_pantry","add_product",{barcode:barcode,name:name,expiry_date:expiry}); }
+        this.dispatchEvent(new CustomEvent("hass-notification",{detail:{message:this._t("added_n",{n:qty})+" \u00d7 "+name},bubbles:true,composed:true}));
+        close();
+      }catch(err){ console.error(err); alert(this._t("err_add")); save.disabled=false; save.textContent=this._t("btn_add_plain"); }
+    };
+  }
+
+  _openManualModal(){
+    const ov=this._overlay();
+    const box=this._modalBox("440px");
+    const close=()=>ov.remove();
+    box.appendChild(this._modalHeader(this._t("modal_manual"), close));
+    const bodyM=this._el("div",{padding:"16px"});
+
+    bodyM.appendChild(this._label(this._t("lbl_name")));
+    const nameInp=this._input({type:"text",value:"",placeholder:this._t("name_placeholder"),width:"100%",marginBottom:"14px"});
+    bodyM.appendChild(nameInp);
+
+    bodyM.appendChild(this._label(this._t("lbl_quantity")));
+    const qtyRow=this._el("div",{display:"flex",alignItems:"center",gap:"8px",marginBottom:"14px"});
+    const minus=this._smallBtn("\u2212"), plus=this._smallBtn("+");
+    const qtyInp=this._input({type:"number",min:1,value:1,textAlign:"center",width:"70px"});
+    minus.onclick=()=>qtyInp.value=Math.max(1,(parseInt(qtyInp.value,10)||1)-1);
+    plus.onclick=()=>qtyInp.value=Math.max(1,(parseInt(qtyInp.value,10)||1)+1);
+    qtyRow.appendChild(minus); qtyRow.appendChild(qtyInp); qtyRow.appendChild(plus);
+    bodyM.appendChild(qtyRow);
+
+    bodyM.appendChild(this._label(this._t("lbl_expiry")));
+    const expRow=this._el("div",{display:"flex",alignItems:"center",gap:"8px",marginBottom:"20px"});
+    const expInp=this._input({type:"date",flex:"1"});
+    const noDate=this._el("button",{height:"36px",padding:"0 10px",borderRadius:"6px",border:"1px solid #ccc",background:"#e9e9e9",color:"#1c1c1c",cursor:"pointer"},{text:this._t("none_f"),on:{click:()=>expInp.value=""}});
+    expRow.appendChild(expInp); expRow.appendChild(noDate);
+    bodyM.appendChild(expRow);
+
+    const btnRow=this._el("div",{display:"flex",justifyContent:"flex-end",gap:"8px"});
+    const cancel=this._btn(this._t("cancel")); cancel.onclick=close;
+    const save=this._btn(this._t("btn_add_plain"),"green");
+    btnRow.appendChild(cancel); btnRow.appendChild(save);
+    bodyM.appendChild(btnRow);
+
+    box.appendChild(bodyM); ov.appendChild(box); document.body.appendChild(ov);
+    ov.addEventListener("click",(e)=>{ if(e.target===ov) close(); });
+    setTimeout(()=>nameInp.focus(),50);
+
+    save.onclick=async()=>{
+      const name=nameInp.value.trim();
+      if(!name){ alert(this._t("ask_name")); nameInp.focus(); return; }
+      let qty=parseInt(qtyInp.value,10); if(isNaN(qty)||qty<1) qty=1;
+      const expiry=expInp.value||null;
+      const barcode="manual_"+Date.now()+"_"+Math.random().toString(36).slice(2,8);
       save.disabled=true; save.textContent="...";
       try{
         for(let i=0;i<qty;i++){ await this._hass.callService("smart_home_pantry","add_product",{barcode:barcode,name:name,expiry_date:expiry}); }
