@@ -27,6 +27,7 @@ from .const import (
     CONF_NEXT_EXPIRY_WITHIN,
     CONF_EXPIRED_WITHIN,
     CONF_SORT_ORDER,
+    CONF_LOCATIONS,
     DEFAULT_DAYS_BEFORE,
     DEFAULT_NOTIFY_TIME,
     DEFAULT_NOTIFY_SERVICES,
@@ -40,6 +41,7 @@ from .const import (
     DEFAULT_NEXT_EXPIRY_WITHIN,
     DEFAULT_EXPIRED_WITHIN,
     DEFAULT_SORT_ORDER,
+    DEFAULT_LOCATIONS,
     PERSISTENT_NOTIFICATION_ID,
 )
 from .api import lookup_openfoodfacts
@@ -421,6 +423,7 @@ async def async_setup_entry(hass, entry):
         old_expiry = call.data.get("old_expiry_date")
         if old_expiry == "":
             old_expiry = None
+        old_location = call.data.get("old_location") or ""
 
         has_new_qty = "quantity" in call.data
         new_qty = call.data.get("quantity")
@@ -428,17 +431,19 @@ async def async_setup_entry(hass, entry):
         new_expiry = call.data.get("new_expiry_date")
         if new_expiry == "":
             new_expiry = None
+        has_new_location = "new_location" in call.data
+        new_location = call.data.get("new_location") or ""
 
         target = None
         for p in data["products"]:
-            if p["barcode"] == barcode and p.get("expiry_date") == old_expiry:
+            if p["barcode"] == barcode and p.get("expiry_date") == old_expiry and (p.get("location") or "") == old_location:
                 target = p
                 break
 
         if target is None:
             _LOGGER.warning(
-                "update_lot: lotto non trovato (barcode=%s, scadenza=%s)",
-                barcode, old_expiry,
+                "update_lot: lotto non trovato (barcode=%s, scadenza=%s, posizione=%s)",
+                barcode, old_expiry, old_location,
             )
             return
 
@@ -453,12 +458,18 @@ async def async_setup_entry(hass, entry):
             else:
                 target["quantity"] = q
 
-        if target is not None and has_new_expiry and new_expiry != old_expiry:
+        if target is not None and (
+            (has_new_expiry and new_expiry != old_expiry)
+            or (has_new_location and new_location != old_location)
+        ):
+            final_expiry = new_expiry if has_new_expiry else target.get("expiry_date")
+            final_location = new_location if has_new_location else (target.get("location") or "")
+
             merge_into = None
             for p in data["products"]:
                 if p is target:
                     continue
-                if p["barcode"] == barcode and p.get("expiry_date") == new_expiry:
+                if p["barcode"] == barcode and p.get("expiry_date") == final_expiry and (p.get("location") or "") == final_location:
                     merge_into = p
                     break
 
@@ -466,7 +477,8 @@ async def async_setup_entry(hass, entry):
                 merge_into["quantity"] = int(merge_into.get("quantity", 0)) + int(target.get("quantity", 0))
                 data["products"].remove(target)
             else:
-                target["expiry_date"] = new_expiry
+                target["expiry_date"] = final_expiry
+                target["location"] = final_location
 
         data["unique_products"] = len(data["products"])
         data["products_count"] = sum(int(x.get("quantity", 0)) for x in data["products"])
@@ -665,6 +677,8 @@ async def async_setup_entry(hass, entry):
 
     def _update_card_settings():
         opts = entry.options
+        raw_locations = opts.get(CONF_LOCATIONS, DEFAULT_LOCATIONS)
+        locations = [s.strip() for s in str(raw_locations).split(",") if s.strip()]
         data["card_settings"] = {
             "days_before": int(opts.get(CONF_DAYS_BEFORE, DEFAULT_DAYS_BEFORE)),
             "days_critical": int(opts.get(CONF_DAYS_CRITICAL, DEFAULT_DAYS_CRITICAL)),
@@ -672,6 +686,7 @@ async def async_setup_entry(hass, entry):
             "next_expiry_within": int(opts.get(CONF_NEXT_EXPIRY_WITHIN, DEFAULT_NEXT_EXPIRY_WITHIN)),
             "expired_within": int(opts.get(CONF_EXPIRED_WITHIN, DEFAULT_EXPIRED_WITHIN)),
             "sort_order": opts.get(CONF_SORT_ORDER, DEFAULT_SORT_ORDER),
+            "locations": locations,
         }
 
     async def _options_updated(hass, updated_entry):

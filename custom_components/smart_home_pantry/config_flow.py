@@ -19,6 +19,7 @@ from .const import (
     CONF_NEXT_EXPIRY_WITHIN,
     CONF_EXPIRED_WITHIN,
     CONF_SORT_ORDER,
+    CONF_LOCATIONS,
     DEFAULT_DAYS_BEFORE,
     DEFAULT_NOTIFY_TIME,
     DEFAULT_NOTIFY_SERVICES,
@@ -32,6 +33,7 @@ from .const import (
     DEFAULT_NEXT_EXPIRY_WITHIN,
     DEFAULT_EXPIRED_WITHIN,
     DEFAULT_SORT_ORDER,
+    DEFAULT_LOCATIONS,
     DATE_FORMATS,
     SORT_ORDERS,
 )
@@ -158,6 +160,10 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                     translation_key="sort_order",
                 )
             ),
+            vol.Optional(
+                CONF_LOCATIONS,
+                default=options.get(CONF_LOCATIONS, DEFAULT_LOCATIONS),
+            ): str,
         })
 
         return self.async_show_form(

@@ -204,6 +204,7 @@ class SmartHomePantryCard extends HTMLElement {
       nextExpiryWithin: Number(pick("next_expiry_within", 30)),
       expiredWithin: Number(pick("expired_within", 30)),
       sortOrder: String(pick("sort_order", "expiry")),
+      locations: (function(){ const v=pick("locations",null); return Array.isArray(v)?v.filter(x=>x&&String(x).trim()):[]; })(),
     };
   }
 
@@ -288,6 +289,7 @@ class SmartHomePantryCard extends HTMLElement {
 
     const products = stateObj.attributes && stateObj.attributes.products || [];
     const S = this._settings(stateObj);
+    this._lastSettings = S;
     const todayKey = new Date().toDateString();
 
     const renderHash = JSON.stringify([todayKey, stateObj.state, stateObj.attributes.unique_products, products, S]);
@@ -490,15 +492,15 @@ class SmartHomePantryCard extends HTMLElement {
         const row=this._el("div",{display:"flex",alignItems:"center",gap:"10px",padding:"9px 10px",borderRadius:"10px"});
         if(l.barcode){
           row.style.cursor="pointer";
-          row.addEventListener("click",()=>this._openEditLotModal({barcode:l.barcode,name:l.name,expiry:l.expiry_date||null,quantity:Number(l.quantity||0)}));
+          row.addEventListener("click",()=>this._openEditLotModal({barcode:l.barcode,name:l.name,expiry:l.expiry_date||null,quantity:Number(l.quantity||0),location:l.location||""}));
         }
         row.appendChild(this._el("div",{width:"5px",alignSelf:"stretch",borderRadius:"3px",background:barColor,flex:"0 0 auto"}));
         const main=this._el("div",{flex:"1",minWidth:"0"});
         main.appendChild(this._el("div",{fontSize:"14px",color:primaryText,fontWeight:"600"},{text:"\ud83d\udcc5 "+this._fmtDate(l.expiry_date, S.dateFormat, dd)}));
         main.appendChild(this._el("div",{fontSize:"12px",marginTop:"1px",color:subColor},{text:sub}));
         if(l.location){
-          const locIcon={pantry:"\ud83e\uddfa",fridge:"\u2744\ufe0f",freezer:"\ud83e\uddca"}[l.location]||"\ud83d\udccd";
-          main.appendChild(this._el("div",{fontSize:"11px",marginTop:"2px",color:secondaryText,display:"inline-block",background:secBg,borderRadius:"6px",padding:"1px 7px"},{text:locIcon+" "+this._locationLabel(l.location)}));
+          const locLbl=this._locationLabel(l.location);
+          main.appendChild(this._el("div",{fontSize:"11px",marginTop:"2px",color:secondaryText,display:"inline-block",background:secBg,borderRadius:"6px",padding:"1px 7px"},{text:this._locationEmoji(locLbl)+" "+locLbl}));
         }
         row.appendChild(main);
         row.appendChild(this._el("div",{fontSize:"15px",fontWeight:"800",color:primaryText,flex:"0 0 auto"},{text:"\u00d7"+l.quantity}));
@@ -679,22 +681,40 @@ class SmartHomePantryCard extends HTMLElement {
   }
   _smallBtn(text){ return this._el("button",{width:"36px",height:"36px",fontSize:"18px",borderRadius:"6px",border:"1px solid #ccc",background:"#e9e9e9",color:"#1c1c1c",cursor:"pointer"},{text:text}); }
 
+  _userLocations(){
+    const S=this._lastSettings||{};
+    let list=Array.isArray(S.locations)?S.locations.slice():[];
+    if(list.length===0) list=["Dispensa","Frigo","Freezer"];
+    return list;
+  }
+
   _locationSelect(current){
     const sel=this._el("select",{fontSize:"16px",height:"36px",color:"#1c1c1c",background:"#fff",border:"1px solid #ccc",borderRadius:"6px",padding:"0 8px",width:"100%",boxSizing:"border-box"});
-    const opts=[["",this._t("loc_none")],["pantry",this._t("loc_pantry")],["fridge",this._t("loc_fridge")],["freezer",this._t("loc_freezer")]];
+    const cur=this._locationLabel(current||"");
+    const opts=[["",this._t("loc_none")]];
+    this._userLocations().forEach(loc=>opts.push([loc,loc]));
+    if(cur && !this._userLocations().some(l=>l===cur)) opts.push([cur,cur]);
     opts.forEach(([val,lbl])=>{
       const o=this._el("option",null,{text:lbl});
       o.value=val;
-      if((current||"")===val) o.selected=true;
+      if((cur||"")===val) o.selected=true;
       sel.appendChild(o);
     });
     return sel;
   }
 
   _locationLabel(code){
-    const map={pantry:"loc_pantry",fridge:"loc_fridge",freezer:"loc_freezer"};
-    if(code && map[code]) return this._t(map[code]);
+    const legacy={pantry:"loc_pantry",fridge:"loc_fridge",freezer:"loc_freezer"};
+    if(code && legacy[code]) return this._t(legacy[code]);
     return code || "";
+  }
+
+  _locationEmoji(loc){
+    const n=String(loc||"").toLowerCase();
+    if(/frigo|fridge|refriger/.test(n)) return "\u2744\ufe0f";
+    if(/freezer|congelat/.test(n)) return "\ud83e\uddca";
+    if(/dispensa|pantry|credenza|cantina|cellar/.test(n)) return "\ud83e\uddfa";
+    return "\ud83d\udccd";
   }
 
   _openAddModal(barcode, foundName){
@@ -836,11 +856,16 @@ class SmartHomePantryCard extends HTMLElement {
     bodyM.appendChild(qtyRow);
 
     bodyM.appendChild(this._label(this._t("lbl_expiry")));
-    const expRow=this._el("div",{display:"flex",alignItems:"center",gap:"8px",marginBottom:"20px"});
+    const expRow=this._el("div",{display:"flex",alignItems:"center",gap:"8px",marginBottom:"14px"});
     const expInp=this._input({type:"date",value:lot.expiry||"",flex:"1"});
     const noDate=this._el("button",{height:"36px",padding:"0 10px",borderRadius:"6px",border:"1px solid #ccc",background:"#e9e9e9",color:"#1c1c1c",cursor:"pointer"},{text:this._t("none_f"),on:{click:()=>expInp.value=""}});
     expRow.appendChild(expInp); expRow.appendChild(noDate);
     bodyM.appendChild(expRow);
+
+    bodyM.appendChild(this._label(this._t("lbl_location")));
+    const locSel=this._locationSelect(lot.location||"");
+    this._s(locSel,{marginBottom:"20px"});
+    bodyM.appendChild(locSel);
 
     const btnRow=this._el("div",{display:"flex",justifyContent:"flex-end",gap:"8px"});
     const cancel=this._btn(this._t("cancel")); cancel.onclick=close;
@@ -854,13 +879,17 @@ class SmartHomePantryCard extends HTMLElement {
     save.onclick=async()=>{
       let newQty=parseInt(qtyInp.value,10); if(isNaN(newQty)||newQty<0) newQty=lot.quantity;
       const newExpiry=expInp.value||null;
+      const newLocation=locSel.value||"";
+      const oldLocation=this._locationLabel(lot.location||"");
       const qtyChanged=newQty!==lot.quantity;
       const expiryChanged=newExpiry!==(lot.expiry||null);
-      if(!qtyChanged&&!expiryChanged){ close(); return; }
+      const locationChanged=newLocation!==oldLocation;
+      if(!qtyChanged&&!expiryChanged&&!locationChanged){ close(); return; }
       if(newQty===0&&!confirm(this._t("confirm_remove_lot")+(lot.name||lot.barcode)+"?")) return;
-      const payload={barcode:lot.barcode,old_expiry_date:lot.expiry||""};
+      const payload={barcode:lot.barcode,old_expiry_date:lot.expiry||"",old_location:lot.location||""};
       if(qtyChanged) payload.quantity=newQty;
       if(expiryChanged) payload.new_expiry_date=newExpiry||"";
+      if(locationChanged) payload.new_location=newLocation;
       save.disabled=true; save.textContent="...";
       try{
         await this._hass.callService("smart_home_pantry","update_lot",payload);

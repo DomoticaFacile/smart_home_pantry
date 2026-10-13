@@ -28,6 +28,7 @@ CONF_SIDEBAR_TITLE = "sidebar_title"
 CONF_NEXT_EXPIRY_WITHIN = "next_expiry_within"
 CONF_EXPIRED_WITHIN = "expired_within"
 CONF_SORT_ORDER = "sort_order"
+CONF_LOCATIONS = "locations"
 
 DEFAULT_DAYS_BEFORE = 7
 DEFAULT_NOTIFY_TIME = "09:00:00"
@@ -42,6 +43,7 @@ DEFAULT_SIDEBAR_TITLE = "Smart Home Pantry"
 DEFAULT_NEXT_EXPIRY_WITHIN = 30
 DEFAULT_EXPIRED_WITHIN = 30
 DEFAULT_SORT_ORDER = "expiry"
+DEFAULT_LOCATIONS = "Dispensa, Frigo, Freezer"
 
 DATE_FORMATS = ["dd/mm/yyyy", "yyyy-mm-dd", "mm/dd/yyyy", "relative"]
 

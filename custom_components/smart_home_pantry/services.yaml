@@ -140,6 +140,13 @@ update_lot:
       example: "2025-12-31"
       selector:
         date:
+    old_location:
+      name: Posizione attuale
+      description: Posizione attuale del lotto da modificare. Serve a identificare il lotto giusto quando lo stesso prodotto e' in piu' posizioni. Lascia vuoto per il lotto senza posizione.
+      required: false
+      example: "frigo"
+      selector:
+        text:
     quantity:
       name: Nuova quantita
       description: Nuova quantita del lotto. Se impostata a 0, il lotto viene rimosso. Lascia vuoto per non modificarla.
@@ -157,6 +164,13 @@ update_lot:
       example: "2026-01-15"
       selector:
         date:
+    new_location:
+      name: Nuova posizione
+      description: Nuova posizione del lotto. Lascia vuoto per non modificarla. Se coincide con un altro lotto dello stesso prodotto e scadenza, i due lotti vengono uniti.
+      required: false
+      example: "dispensa"
+      selector:
+        text:
 
 refresh:
   name: Refresh
