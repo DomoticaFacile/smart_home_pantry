@@ -15,6 +15,7 @@
           "next_expiry_within": "Show 'Next expiry' only if within these days",
           "expired_within": "Show expired products in the hero for this many days after expiry",
           "sort_order": "Product list sorting",
+          "locations": "Available locations (comma separated, e.g. Pantry, Fridge, Freezer)",
           "sidebar_enabled": "Show the pantry in the Home Assistant sidebar",
           "sidebar_title": "Sidebar item name"
         }

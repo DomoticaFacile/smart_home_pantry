@@ -15,6 +15,7 @@
           "next_expiry_within": "Mostra 'Prossima scadenza' solo se entro questi giorni",
           "expired_within": "Mostra i prodotti scaduti nell'hero per questi giorni dopo la scadenza",
           "sort_order": "Ordinamento della lista prodotti",
+          "locations": "Posizioni disponibili (separate da virgola, es. Dispensa, Frigo, Freezer)",
           "sidebar_enabled": "Mostra la dispensa nella barra laterale di Home Assistant",
           "sidebar_title": "Nome della voce nella barra laterale"
         }
