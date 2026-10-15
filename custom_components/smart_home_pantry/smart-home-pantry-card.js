@@ -670,6 +670,7 @@ class SmartHomePantryCard extends HTMLElement {
   _input(opts){
     const i=this._el("input",{fontSize:"16px",height:"36px",color:"#1c1c1c",background:"#fff",border:"1px solid #ccc",borderRadius:"6px",padding:"0 8px",boxSizing:"border-box"});
     if(opts){ if(opts.type)i.type=opts.type; if(opts.value!=null)i.value=opts.value; if(opts.id)i.id=opts.id; if(opts.placeholder)i.placeholder=opts.placeholder; if(opts.readonly){i.readOnly=true;i.style.background="#f4f4f4";i.style.color="#444";} if(opts.width)i.style.width=opts.width; if(opts.min!=null)i.min=opts.min; if(opts.max!=null)i.max=opts.max; if(opts.textAlign)i.style.textAlign=opts.textAlign; if(opts.marginBottom)i.style.marginBottom=opts.marginBottom; if(opts.flex)i.style.flex=opts.flex; if(opts.borderColor)i.style.borderColor=opts.borderColor; }
+    if(opts&&opts.type==="date"){ i.addEventListener("click",function(){ try{ if(typeof i.showPicker==="function") i.showPicker(); }catch(e){} }); }
     return i;
   }
   _btn(text, kind){
