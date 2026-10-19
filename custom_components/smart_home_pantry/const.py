@@ -9,6 +9,9 @@ URL_BASE = "/smart_home_pantry"
 CARD_URL = f"{URL_BASE}/{CARD_FILENAME}"
 EXPORT_URL = f"{URL_BASE}/export_expired.xlsx"
 
+QR_FILENAME = "html5-qrcode.min.js"
+QR_URL = f"{URL_BASE}/{QR_FILENAME}"
+
 PANEL_FILENAME = "smart-home-pantry-panel.js"
 PANEL_URL = f"{URL_BASE}/{PANEL_FILENAME}"
 PANEL_URL_PATH = "smart-home-pantry"

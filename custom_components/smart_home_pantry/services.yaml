@@ -209,11 +209,11 @@ clear_expired:
 
 export_expired:
   name: Export Expired
-  description: "Salva la lista dei prodotti scaduti come file Excel (.xlsx) nella cartella www di Home Assistant, scaricabile poi da /local/ + nome file. Utile per automazioni, ad esempio per inviarlo via email."
+  description: "Salva la lista dei prodotti scaduti come file Excel (.xlsx) nella cartella multimediale di Home Assistant (sottocartella smart_home_pantry). Il file e' sfogliabile dal browser multimediale (con autenticazione) e utilizzabile come allegato nelle automazioni. Utile ad esempio per inviarlo via email."
   fields:
     filename:
       name: Nome del file
-      description: "Nome del file da creare nella cartella www (l'estensione .xlsx viene aggiunta se manca)."
+      description: "Nome del file da creare nella cartella multimediale (l'estensione .xlsx viene aggiunta se manca)."
       required: false
       example: "prodotti_scaduti.xlsx"
       default: "prodotti_scaduti.xlsx"

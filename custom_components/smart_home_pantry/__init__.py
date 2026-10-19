@@ -585,13 +585,21 @@ async def async_setup_entry(hass, entry):
             filename += ".xlsx"
         filename = os.path.basename(filename)
 
-        www_dir = hass.config.path("www")
-        target = os.path.join(www_dir, filename)
+        media_dirs = hass.config.media_dirs or {}
+        if "local" in media_dirs:
+            media_id, media_root = "local", media_dirs["local"]
+        elif media_dirs:
+            media_id, media_root = next(iter(media_dirs.items()))
+        else:
+            media_id, media_root = "local", hass.config.path("media")
+
+        target_dir = os.path.join(media_root, DOMAIN)
+        target = os.path.join(target_dir, filename)
 
         products = data.get("expired_products", [])
 
         def _write():
-            os.makedirs(www_dir, exist_ok=True)
+            os.makedirs(target_dir, exist_ok=True)
             rows = expired_rows(products, date.today())
             content = build_xlsx(rows)
             with open(target, "wb") as f:
@@ -600,9 +608,13 @@ async def async_setup_entry(hass, entry):
 
         try:
             n = await hass.async_add_executor_job(_write)
+            media_uri = "media-source://media_source/{mid}/{dom}/{fn}".format(
+                mid=media_id, dom=DOMAIN, fn=filename
+            )
             _LOGGER.info(
-                "Export scaduti salvato: %s (%s prodotti) - scaricabile da /local/%s",
-                target, n, filename,
+                "Export scaduti salvato: %s (%s prodotti) - sfogliabile nel browser "
+                "multimediale e utilizzabile come allegato (%s)",
+                target, n, media_uri,
             )
         except Exception as err:
             _LOGGER.error("Errore durante l'export dei prodotti scaduti: %s", err)

@@ -587,7 +587,7 @@ class SmartHomePantryCard extends HTMLElement {
     const loadLib=()=>new Promise((resolve,reject)=>{
       if(window.Html5Qrcode){resolve();return;}
       const s=document.createElement('script');
-      s.src='https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+      s.src='/smart_home_pantry/html5-qrcode.min.js';
       s.onload=resolve;
       s.onerror=()=>reject(new Error("nolib"));
       document.head.appendChild(s);

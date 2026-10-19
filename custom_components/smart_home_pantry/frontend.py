@@ -10,6 +10,7 @@ from homeassistant.components import frontend, panel_custom
 
 from .const import (
     CARD_FILENAME, CARD_URL, URL_BASE, EXPORT_URL, DOMAIN,
+    QR_FILENAME, QR_URL,
     PANEL_FILENAME, PANEL_URL, PANEL_URL_PATH, PANEL_COMPONENT_NAME, PANEL_ICON,
 )
 from .export import build_xlsx, expired_rows
@@ -50,6 +51,7 @@ async def async_register_card(hass: HomeAssistant, version: str) -> None:
     base = os.path.dirname(__file__)
     card_path = os.path.join(base, CARD_FILENAME)
     panel_path = os.path.join(base, PANEL_FILENAME)
+    qr_path = os.path.join(base, QR_FILENAME)
 
     if not hass.data.get(DOMAIN, {}).get("export_view_registered"):
         try:
@@ -63,6 +65,7 @@ async def async_register_card(hass: HomeAssistant, version: str) -> None:
         await hass.http.async_register_static_paths([
             StaticPathConfig(CARD_URL, card_path, False),
             StaticPathConfig(PANEL_URL, panel_path, False),
+            StaticPathConfig(QR_URL, qr_path, False),
         ])
         _LOGGER.debug("Card e pannello Smart Home Pantry serviti (%s, %s)", CARD_URL, PANEL_URL)
     except RuntimeError:
