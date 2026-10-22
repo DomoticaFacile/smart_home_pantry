@@ -11,7 +11,7 @@ A custom integration to **manage your food pantry** in Home Assistant and keep e
 
 > Perfect for anyone who is tired of throwing away forgotten food. Product names come from Open Food Facts: no account, no API key.
 
-![HACS Custom](https://img.shields.io/badge/HACS-Custom-blue)
+![HACS Default](https://img.shields.io/badge/HACS-Default-41BDF5)
 ![Platform](https://img.shields.io/badge/Platform-Home%20Assistant-41BDF5)
 ![Maintainer](https://img.shields.io/badge/Maintainer-DomoticaFacile-blueviolet)
 [![Donate](https://img.shields.io/badge/Buy_Me_A_Coffee-%E2%98%95-yellow)](https://www.buymeacoffee.com/domoticafacile)
@@ -40,6 +40,7 @@ A custom integration to **manage your food pantry** in Home Assistant and keep e
 ✅ **Product not in the database?** Type the name yourself, it gets saved anyway  
 ✅ **Lot management**: same product, different expiry dates, kept separate  
 ✅ **FEFO removal**: when you take an item, the one expiring first goes out  
+✅ **Locations**: store each item in Pantry, Fridge, Freezer — or your own custom places, editable later  
 ✅ **Expiry notifications**: persistent in Home Assistant and push to the Companion app  
 ✅ **Lovelace card included**, registered automatically (no files to copy, no resources to add)  
 ✅ **Optional sidebar panel**: your pantry full-page in the Home Assistant menu  
@@ -56,16 +57,14 @@ A custom integration to **manage your food pantry** in Home Assistant and keep e
 
 ## ⚙️ Installation via HACS
 
+Smart Home Pantry is available **directly in HACS** — no custom repository needed.
+
 > If you don't have HACS, follow the official guide: https://hacs.xyz
 
 1. Open **HACS**
-2. Click the **three dots** in the top-right corner
-3. Select **Custom repositories**
-4. Copy & paste this repository URL: https://github.com/DomoticaFacile/smart_home_pantry
-5. Select **Integration**
-6. Click **Add**
-7. Find the integration in the HACS list, click it and then install it
-8. **Restart Home Assistant**
+2. Search for **Smart Home Pantry**
+3. Open it and click **Download**
+4. **Restart Home Assistant**
 
 ---
 
@@ -134,6 +133,11 @@ Older ones stay in memory and in the list, but they don't clutter the top.
 - Alphabetical (A-Z)
 - Running low first (fewest items)
 - Most items first
+
+### 📍 Available locations (locations)
+The storage locations you can assign items to, comma separated.
+Example: `Pantry, Fridge, Freezer, Cellar, Garage`.
+The dropdown in every form is built from this list and each location gets a fitting icon in the card. Default: `Dispensa, Frigo, Freezer` — replace them with your own.
 
 ---
 
@@ -212,7 +216,7 @@ date_format: relative
 sort_order: alphabetical
 ```
 
-From the card you can: scan a product, take items out, remove manually, edit a lot (quantity and/or expiry), clear expired products and export them to Excel.
+From the card you can: scan a product, take items out, remove manually, edit a lot (quantity, expiry and/or location), clear expired products and export them to Excel.
 
 ---
 
@@ -223,9 +227,9 @@ From the card you can: scan a product, take items out, remove manually, edit a l
 | `smart_home_pantry.scan_barcode` | Adds a product from its barcode |
 | `smart_home_pantry.add_product` | Adds a product with name and expiry date |
 | `smart_home_pantry.remove_quantity` | Removes N items (from the lot expiring first) |
-| `smart_home_pantry.update_lot` | Changes quantity and/or expiry date of a lot |
+| `smart_home_pantry.update_lot` | Changes quantity, expiry date and/or location of a lot |
 | `smart_home_pantry.clear_expired` | Removes all expired products |
-| `smart_home_pantry.export_expired` | Saves the expired list as an Excel file in `www/` |
+| `smart_home_pantry.export_expired` | Saves the expired list as an Excel file in the media folder |
 | `smart_home_pantry.lookup_barcode` | Looks up a barcode without adding anything |
 | `smart_home_pantry.clear_cache` | Clears the Open Food Facts cache |
 | `smart_home_pantry.refresh` | Recalculates the counters |
@@ -359,6 +363,8 @@ You may use, modify, and distribute it freely, as long as the original copyright
 
 Read the LICENSE file for full details.
 
+**Third-party components:** the barcode scanner uses [html5-qrcode](https://github.com/mebjas/html5-qrcode) (Apache-2.0), bundled with the integration and served locally so it works without internet access. Its license is included as `html5-qrcode.LICENSE` in the integration folder.
+
 [![Buy Me A Coffee](https://github.com/appcraftstudio/buymeacoffee/raw/master/Images/snapshot-bmc-button.png)](https://www.buymeacoffee.com/domoticafacile)
 
 ---
@@ -375,7 +381,7 @@ Integrazione personalizzata per **gestire la dispensa di casa** in Home Assistan
 
 > Perfetta per chi è stanco di buttare via il cibo dimenticato. I nomi dei prodotti arrivano da Open Food Facts: nessun account, nessuna chiave API.
 
-![HACS Custom](https://img.shields.io/badge/HACS-Custom-blue)
+![HACS Default](https://img.shields.io/badge/HACS-Default-41BDF5)
 ![Platform](https://img.shields.io/badge/Platform-Home%20Assistant-41BDF5)
 ![Maintainer](https://img.shields.io/badge/Maintainer-DomoticaFacile-blueviolet)
 [![Donate](https://img.shields.io/badge/Buy_Me_A_Coffee-%E2%98%95-yellow)](https://www.buymeacoffee.com/domoticafacile)
@@ -404,6 +410,7 @@ Integrazione personalizzata per **gestire la dispensa di casa** in Home Assistan
 ✅ **Prodotto non nel database?** Scrivi tu il nome, viene salvato lo stesso  
 ✅ **Gestione a lotti**: stesso prodotto, scadenze diverse, tenute separate  
 ✅ **Prelievo FEFO**: quando togli un pezzo, esce quello che scade prima  
+✅ **Posizioni**: assegna ogni prodotto a Dispensa, Frigo, Freezer — o a posizioni personalizzate, modificabili in seguito  
 ✅ **Notifiche di scadenza**: persistenti in Home Assistant e push sull'app Companion  
 ✅ **Card Lovelace inclusa**, registrata automaticamente (niente file da copiare, niente risorse da aggiungere)  
 ✅ **Pannello nella barra laterale** (opzionale): la dispensa a tutta pagina  
@@ -420,16 +427,14 @@ Integrazione personalizzata per **gestire la dispensa di casa** in Home Assistan
 
 ## ⚙️ Installazione tramite HACS
 
+Smart Home Pantry è disponibile **direttamente in HACS** — non serve aggiungere alcun repository personalizzato.
+
 > Se non hai HACS, segui la guida ufficiale: https://hacs.xyz
 
 1. Apri **HACS**
-2. Vai sui 3 pallini in alto a destra
-3. Clicca su "Archivi digitali personalizzati"
-4. Copia e incolla l'indirizzo di questo repo: https://github.com/DomoticaFacile/smart_home_pantry
-5. Seleziona "Integrazione"
-6. Clicca "Aggiungi"
-7. Cerca l'integrazione nell'elenco di HACS, clicca e poi installa
-8. **Riavvia Home Assistant**
+2. Cerca **Smart Home Pantry**
+3. Aprila e clicca **Scarica**
+4. **Riavvia Home Assistant**
 
 ---
 
@@ -498,6 +503,11 @@ I più vecchi restano in memoria e nella lista, ma non affollano l'intestazione.
 - Ordine alfabetico (A-Z)
 - In esaurimento prima (meno pezzi)
 - Più numerosi prima
+
+### 📍 Posizioni disponibili (locations)
+Le posizioni in cui puoi riporre i prodotti, separate da virgola.
+Esempio: `Dispensa, Frigo, Freezer, Cantina, Garage`.
+Il menu a tendina in ogni form viene costruito da questa lista e ogni posizione riceve un'icona adatta nella card. Predefinite: `Dispensa, Frigo, Freezer` — sostituiscile con le tue.
 
 ---
 
@@ -576,7 +586,7 @@ date_format: relative
 sort_order: alphabetical
 ```
 
-Dalla card puoi: scansionare un prodotto, prelevare pezzi, rimuovere manualmente, modificare un lotto (quantità e/o scadenza), azzerare gli scaduti ed esportarli in Excel.
+Dalla card puoi: scansionare un prodotto, prelevare pezzi, rimuovere manualmente, modificare un lotto (quantità, scadenza e/o posizione), azzerare gli scaduti ed esportarli in Excel.
 
 ---
 
@@ -587,9 +597,9 @@ Dalla card puoi: scansionare un prodotto, prelevare pezzi, rimuovere manualmente
 | `smart_home_pantry.scan_barcode` | Aggiunge un prodotto dal codice a barre |
 | `smart_home_pantry.add_product` | Aggiunge un prodotto con nome e scadenza |
 | `smart_home_pantry.remove_quantity` | Toglie N pezzi (dal lotto che scade prima) |
-| `smart_home_pantry.update_lot` | Modifica quantità e/o scadenza di un lotto |
+| `smart_home_pantry.update_lot` | Modifica quantità, scadenza e/o posizione di un lotto |
 | `smart_home_pantry.clear_expired` | Rimuove tutti i prodotti scaduti |
-| `smart_home_pantry.export_expired` | Salva la lista degli scaduti come file Excel in `www/` |
+| `smart_home_pantry.export_expired` | Salva la lista degli scaduti come file Excel nella cartella multimediale |
 | `smart_home_pantry.lookup_barcode` | Cerca un codice a barre senza aggiungere nulla |
 | `smart_home_pantry.clear_cache` | Svuota la cache di Open Food Facts |
 | `smart_home_pantry.refresh` | Ricalcola i contatori |
@@ -722,6 +732,8 @@ Questo progetto è distribuito sotto licenza **MIT**.
 Puoi usarlo, modificarlo e distribuirlo liberamente, purché venga mantenuto il copyright originario.
 
 Leggi il file [LICENSE](LICENSE) per i dettagli completi.
+
+**Componenti di terze parti:** lo scanner del codice a barre usa [html5-qrcode](https://github.com/mebjas/html5-qrcode) (Apache-2.0), incluso nell'integrazione e servito in locale così da funzionare anche senza accesso a Internet. La relativa licenza è inclusa come `html5-qrcode.LICENSE` nella cartella dell'integrazione.
 
 ---
 
